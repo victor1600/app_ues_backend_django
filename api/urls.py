@@ -10,7 +10,7 @@ router.register(r'materials', views.SupplementaryMaterialViewSet)
 router.register(r'questions', views.QuestionViewSet)
 router.register(r'answers', views.AnswerViewSet)
 
-
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('auth/', include('rest_auth.urls')),
 ]
