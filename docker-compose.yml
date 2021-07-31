@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  backend:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+    - .:/app
+    environment:
+      - PROD=${PROD}
+      - MANAGED=${MANAGED}
+      - SECRET_KEY=${SECRET_KEY}
