@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'users',
     'rest_framework',
     'django_cleanup.apps.CleanupConfig',
 ]
@@ -95,19 +96,20 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
+# TODO: Disabled for dev purposes
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 # Internationalization
@@ -132,24 +134,8 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# EXTRA VARS
+# ADDED SETTINGS
 MANAGED = truthiness(get_env('MANAGED', 'true'))
-
-# Cloudinary
-
-# CLOUD_NAME = get_env('CLOUD_NAME')
-# CLOUDINARY_API_KEY = get_env('CLOUDINARY_API_KEY')
-# CLOUDINARY_API_SECRET = get_env('CLOUDINARY_API_SECRET')
-#
-#
-# cloudinary.config(
-#     cloud_name=CLOUD_NAME,
-#     api_key=CLOUDINARY_API_KEY,
-#     api_secret=CLOUDINARY_API_SECRET
-# )
-#
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# MEDIA_URL = 'https://res.cloudinary.com/kiwi1600/'
 
 # RIGHT CONFIGURATION FOR STATIC
 STATIC_URL = '/static/'
@@ -161,3 +147,5 @@ STATICFILES_DIRS = [
 # Every image or file we upload, goes to the media folder.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'users.CustomUser'
