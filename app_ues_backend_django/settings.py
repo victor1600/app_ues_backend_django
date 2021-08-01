@@ -140,15 +140,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MANAGED = truthiness(get_env('MANAGED', 'true'))
 
 # RIGHT CONFIGURATION FOR STATIC
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app_ues_backend_django/static')
-]
 
-# Every image or file we upload, goes to the media folder.
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+STATIC_URL = "/staticfiles/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+MEDIA_URL = "/mediafiles/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
