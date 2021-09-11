@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'django_filters',
 ]
-
+#
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
