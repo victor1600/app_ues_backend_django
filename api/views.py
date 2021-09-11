@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
+
 from .serializers import CourseSerializer, SupplementaryMaterialSerializer, TopicSerializer, QuestionSerializer, \
     AnswerSerializer
 from .models import Course, SupplementaryMaterial, Topic, Question, Answer
@@ -14,11 +16,16 @@ class CourseViewSet(viewsets.ModelViewSet):
 class SupplementaryMaterialViewSet(viewsets.ModelViewSet):
     queryset = SupplementaryMaterial.objects.all()
     serializer_class = SupplementaryMaterialSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['topic']
+
 
 
 class TopicViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['course']
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
