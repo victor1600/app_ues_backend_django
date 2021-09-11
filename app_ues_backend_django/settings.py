@@ -91,12 +91,26 @@ WSGI_APPLICATION = 'app_ues_backend_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+PROD = truthiness(get_env('PROD', 'true'))
+if PROD:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': get_env('DB_NAME', 'backend'),
+            'USER': get_env('DB_USER', 'doadmin'),
+            'PASSWORD': get_env('DB_PASSWORD', 'phUQNbjqAQ8vPAAd'),
+            'HOST': get_env('DB_HOST', 'db-mysql-nyc3-42223-do-user-7412275-0.b.db.ondigitalocean.com'),
+            'PORT': get_env('DB_PORT', '25060'),
+        }
     }
-}
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
