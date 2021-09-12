@@ -2,7 +2,8 @@ Django~=3.2
 django-filter
 djangorestframework
 django-rest-auth==0.9.5
-djangorestframework-jwt==1.11.0
+django-cors-headers
+djangorestframework-jwt
 django_cleanup
 gunicorn==20.1.0
 mysqlclient==2.0.3

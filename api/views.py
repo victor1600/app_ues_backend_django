@@ -20,7 +20,6 @@ class SupplementaryMaterialViewSet(viewsets.ModelViewSet):
     filterset_fields = ['topic']
 
 
-
 class TopicViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
