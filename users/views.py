@@ -34,7 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             data = serializer.data
-            CustomUser.objects.create_user(email=data.get('email'), password=data.get('password'))
+            CustomUser.objects.create_user(**data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

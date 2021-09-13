@@ -1,5 +1,4 @@
-from django.contrib.auth import authenticate
-
+from .utils import authenticate
 from .models import CustomUser
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
@@ -10,12 +9,11 @@ JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=128, write_only=True)
+    # password = serializers.CharField(max_length=128, write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'password', 'is_superuser', 'is_staff']
-
+        fields = ['email', 'is_superuser', 'is_staff']
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -26,7 +24,8 @@ class UserLoginSerializer(serializers.Serializer):
     def validate(self, data):
         email = data.get("email", None)
         password = data.get("password", None)
-        user = authenticate(username=email, password=password)
+        user = authenticate(email=email, password=password)
+
         if user is None:
             raise serializers.ValidationError(
                 'A user with this email and password is not found.'

@@ -181,6 +181,11 @@ REST_FRAMEWORK = {
     ),
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'users.backends.CustomAuthBackend'
+]
+
 REQUIRE_PERMISSION_CHECK = False
 
 if REQUIRE_PERMISSION_CHECK:
