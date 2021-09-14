@@ -10,6 +10,7 @@ from .serializers import UserLoginSerializer, UserSerializer
 
 class UserLoginView(RetrieveAPIView):
     permission_classes = (AllowAny,)
+    queryset = CustomUser.objects.all()
     serializer_class = UserLoginSerializer
 
     def post(self, request):
