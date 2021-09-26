@@ -44,7 +44,9 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ExamQuestionsAndAnswersSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['topic']
-    # TODO: add LIMIT
+
+    def get_queryset(self):
+        return self.queryset.all().order_by('?')
 
 
 class GradeView(APIView):
