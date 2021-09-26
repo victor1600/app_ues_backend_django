@@ -46,6 +46,15 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['topic']
 
     def get_queryset(self):
+        if 'limit' in self.request.query_params.keys():
+            try:
+                limit = int(self.request.query_params.get('limit'))
+                if limit > 0:
+                    return self.queryset.all().order_by('?')[:limit]
+            except:
+                # TODO: implement better logic for this validation
+                print('Invalid limit query param')
+                pass
         return self.queryset.all().order_by('?')
 
 
