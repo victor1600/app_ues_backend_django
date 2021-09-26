@@ -17,7 +17,7 @@ class Course(models.Model):
     # All images/files get upload to media folder, but here,
     # we define the actual folder well be using inside the media folder.
     icon = models.ImageField(upload_to='photos/icons/%Y/%m/%d/')
-    active = models.PositiveSmallIntegerField(default=1, validators=[validate_zero_or_one])
+    active = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         return self.name
@@ -32,10 +32,14 @@ class Topic(models.Model):
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    active = models.PositiveSmallIntegerField(default=1, validators=[validate_zero_or_one])
+    active = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        managed = settings.MANAGED
+        db_table = 'TOPICS'
 
 
 class SupplementaryMaterial(models.Model):
@@ -50,7 +54,7 @@ class SupplementaryMaterial(models.Model):
 
     class Meta:
         managed = settings.MANAGED
-        db_table = 'SUPPLEMENTARY_MATERIAL'
+        db_table = 'SUPPLEMENTARY_MATERIALS'
 
 
 class Question(models.Model):
@@ -58,18 +62,27 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     question_image = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', blank=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    active = models.PositiveSmallIntegerField(default=1, validators=[validate_zero_or_one])
+    active = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         return self.question_text
+
+    class Meta:
+        managed = settings.MANAGED
+        db_table = 'QUESTIONS'
 
 
 class Answer(models.Model):
     answer_text = models.CharField(max_length=400)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     is_right_answer = models.BooleanField()
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     active = models.PositiveSmallIntegerField(default=1, validators=[validate_zero_or_one])
 
     def __str__(self):
         return self.answer_text
+
+    class Meta:
+        managed = settings.MANAGED
+        db_table = 'ANSWERS'
+

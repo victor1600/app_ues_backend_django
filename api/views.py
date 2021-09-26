@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .serializers import CourseSerializer, SupplementaryMaterialSerializer, TopicSerializer, QuestionSerializer, \
-    AnswerSerializer
-from .models import Course, SupplementaryMaterial, Topic, Question, Answer
+from .serializers import *
+from .models import  *
 from rest_framework import viewsets
 
 
@@ -35,3 +34,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class AnswerViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+
+
+class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = ExamQuestionsAndAnswersSerializer

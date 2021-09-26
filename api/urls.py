@@ -9,6 +9,7 @@ router.register(r'topics', views.TopicViewSet)
 router.register(r'materials', views.SupplementaryMaterialViewSet)
 router.register(r'questions', views.QuestionViewSet)
 router.register(r'answers', views.AnswerViewSet)
+router.register(r'exam-questions', views.ExamQuestionsAndAnswersViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

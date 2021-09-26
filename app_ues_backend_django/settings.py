@@ -13,6 +13,7 @@ from datetime import timedelta
 from pathlib import Path
 import os
 
+
 get_env = os.environ.get
 
 
@@ -186,8 +187,7 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.CustomAuthBackend'
 ]
 
-REQUIRE_PERMISSION_CHECK = False
-
+REQUIRE_PERMISSION_CHECK = truthiness(get_env('REQUIRE_PERMISSION_CHECK', 'false'))
 if REQUIRE_PERMISSION_CHECK:
     REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = [
         'rest_framework.permissions.IsAuthenticated',
@@ -229,3 +229,6 @@ JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_AUTH_COOKIE': None,
 }
+
+
+
