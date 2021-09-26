@@ -37,4 +37,4 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'question_text', 'answers')
+        fields = ('id', 'question_text', 'question_image', 'topic',  'answers')

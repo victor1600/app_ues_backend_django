@@ -60,6 +60,7 @@ class SupplementaryMaterial(models.Model):
 class Question(models.Model):
     question_text = models.TextField()
     created_at = models.DateTimeField(auto_now=True, blank=True)
+    # TODO: fix this.
     question_image = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', blank=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     active = models.PositiveSmallIntegerField(default=1)

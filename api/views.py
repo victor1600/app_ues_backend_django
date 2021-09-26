@@ -39,3 +39,5 @@ class AnswerViewSet(viewsets.ModelViewSet):
 class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Question.objects.all()
     serializer_class = ExamQuestionsAndAnswersSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['topic']
