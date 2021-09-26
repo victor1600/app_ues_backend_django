@@ -13,5 +13,6 @@ router.register(r'exam-questions', views.ExamQuestionsAndAnswersViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('calculate-grade/', views.GradeView.as_view())
     # path('auth/', include('rest_auth.urls')),
 ]

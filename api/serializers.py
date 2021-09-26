@@ -38,3 +38,9 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'question_text', 'question_image', 'topic',  'answers')
+
+
+class ExamResultSerializer(serializers.Serializer):
+    question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
+    answer = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())
+
