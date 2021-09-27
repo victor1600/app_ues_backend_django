@@ -41,6 +41,7 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
 
 class ExamResultSerializer(serializers.Serializer):
+    # TODO: analyze if we really need the questions.
     question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
     answer = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())
 
