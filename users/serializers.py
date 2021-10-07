@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'is_superuser', 'is_staff']
+        fields = ['id','email', 'is_superuser', 'is_staff']
 
 
 class UserLoginSerializer(serializers.Serializer):

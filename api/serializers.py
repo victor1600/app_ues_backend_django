@@ -27,6 +27,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
+    # TODO: validate there is only one question with is_right_answer set to True.
     class Meta:
         model = Answer
         fields = '__all__'
@@ -42,6 +43,6 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
 class ExamResultSerializer(serializers.Serializer):
     # TODO: analyze if we really need the questions.
-    question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
-    answer = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())
+    # question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
+    answers = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all(), many=True)
 
