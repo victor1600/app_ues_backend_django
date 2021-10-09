@@ -65,8 +65,8 @@ class GradeView(APIView):
             answer_ids = serializer.data.get("answers")
             print(answer_ids)
             print(len(answer_ids))
-            # answer_ids = [answer_id.get('answer') for answer_id in serializer.data]
+            # answer_ids = [answer_id.get('answe
             grade = Answer.objects.filter(Q(pk__in=answer_ids) & Q(is_right_answer=True))\
                         .count()/len(answer_ids) * 10
-            return Response({"grade": grade}, status=status.HTTP_200_OK)
+            return Response({"grade": round(grade,2)}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -173,15 +173,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 AUTH_USER_MODEL = 'users.CustomUser'
 
 
-REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.AllowAny',
-    # ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ),
-}
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'users.backends.CustomAuthBackend'
@@ -189,9 +180,11 @@ AUTHENTICATION_BACKENDS = [
 
 REQUIRE_PERMISSION_CHECK = truthiness(get_env('REQUIRE_PERMISSION_CHECK', 'false'))
 if REQUIRE_PERMISSION_CHECK:
-    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = [
+    REST_FRAMEWORK = {'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ), 'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ]}
 
 # Jwt Authentication
 # https://github.com/jpadilla/django-rest-framework-jwt/blob/master/rest_framework_jwt/settings.py
