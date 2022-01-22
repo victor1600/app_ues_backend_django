@@ -33,7 +33,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = get_env('SECRET_KEY', 'django-insecure-e1iiz-og73%^z%cz3aklffj-$$ji9w+56fh(^usnt)1wsnk3d)')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_env('DEBUG', True)
+
+DEBUG = truthiness(get_env('DEBUG', 'false'))
 
 # Change this to site
 ALLOWED_HOSTS = ['*']
@@ -95,8 +96,8 @@ WSGI_APPLICATION = 'app_ues_backend_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-PROD = truthiness(get_env('PROD', 'true'))
-if PROD:
+# PROD = truthiness(get_env('PROD', 'true'))
+if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -107,6 +108,7 @@ if PROD:
             'PORT': get_env('DB_PORT', '25060'),
         }
     }
+    print("connect to PROD DB")
 
 else:
     DATABASES = {
@@ -115,6 +117,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    print("connect to DEV DB")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -162,11 +165,11 @@ MANAGED = truthiness(get_env('MANAGED', 'true'))
 
 # RIGHT CONFIGURATION FOR STATIC
 
-STATIC_URL = "/staticfiles/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = "/mediafiles/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Auth and JWT
 
@@ -223,5 +226,31 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console', 'file'],
+            'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} ({levelname}) - {name} - {message}',
+            'style': '{'
+        }
+    }
+}
 

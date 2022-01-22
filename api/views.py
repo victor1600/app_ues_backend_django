@@ -4,9 +4,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import logging
 from .serializers import *
 from .models import  *
 from rest_framework import viewsets, status
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -53,7 +56,7 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
                     return self.queryset.all().order_by('?')[:limit]
             except:
                 # TODO: implement better logic for this validation
-                print('Invalid limit query param')
+                logger.warning('Invalid limit query param')
                 pass
         return self.queryset.all().order_by('?')
 
@@ -63,9 +66,7 @@ class GradeView(APIView):
         serializer = ExamResultSerializer(data=request.data)
         if serializer.is_valid():
             answer_ids = serializer.data.get("answers")
-            print(answer_ids)
-            print(len(answer_ids))
-            # answer_ids = [answer_id.get('answe
+
             grade = Answer.objects.filter(Q(pk__in=answer_ids) & Q(is_right_answer=True))\
                         .count()/len(answer_ids) * 10
             return Response({"grade": round(grade,2)}, status=status.HTTP_200_OK)
