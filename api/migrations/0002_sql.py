@@ -1,10 +1,14 @@
 from django.db import migrations
-
+from django.conf import settings
 
 
 def load_data_from_sql():
     import os
-    sql_statements = open(os.path.realpath('api/sql/seed_data.sql'), 'r').read()
+    if settings.DEBUG:
+        sql_file = 'seed_data_dev.sql'
+    else:
+        sql_file = 'seed_data_prod.sql'
+    sql_statements = open(os.path.realpath(f'api/sql/{sql_file}'), 'r').read()
     return sql_statements
 
 

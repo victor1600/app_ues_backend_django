@@ -1,11 +1,12 @@
 Django~=3.2
 django-filter
 djangorestframework
+dj-database-url
 django-rest-auth==0.9.5
 django-cors-headers
 djangorestframework-jwt
 django_cleanup
 gunicorn==20.1.0
-mysqlclient==2.0.3
+psycopg2
 pillow
 whitenoise==5.3.0

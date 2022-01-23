@@ -1,20 +1,25 @@
 from .common import *
-
-print("Connected to PROD")
-
-DEBUG = truthiness(get_env('DEBUG', 'false'))
+import dj_database_url
+DEBUG = False
 SECRET_KEY = get_env('SECRET_KEY')
 
 # Only required for prod.
-ALLOWED_HOSTS = ['*']
+# Change this if deployed somewhere else.
+ALLOWED_HOSTS = ['app-ues-prod.herokuapp.com', 'localhost']
+
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': get_env('DB_NAME', 'backend'),
+#             'USER': get_env('DB_USER', 'postgres'),
+#             'PASSWORD': get_env('DB_PASSWORD', 'postgres'),
+#             'HOST': get_env('DB_HOST', '192.168.0.11'),
+#             'PORT': get_env('DB_PORT', '5432'),
+#         }
+#     }
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': get_env('DB_NAME', 'backend'),
-            'USER': get_env('DB_USER', 'doadmin'),
-            'PASSWORD': get_env('DB_PASSWORD', 'phUQNbjqAQ8vPAAd'),
-            'HOST': get_env('DB_HOST', 'db-mysql-nyc3-42223-do-user-7412275-0.b.db.ondigitalocean.com'),
-            'PORT': get_env('DB_PORT', '25060'),
-        }
-    }
+    'default': dj_database_url.config()
+}
+
+print("Connected to PROD")

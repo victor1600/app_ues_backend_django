@@ -14,5 +14,5 @@ INSERT INTO TOPICS (id, name, description, created_at, active, course_id) VALUES
 INSERT INTO SUPPLEMENTARY_MATERIALS (id, name, description, created_at, file, topic_id) VALUES (1, 'Guia trigonometria', '', '2021-09-27 04:23:05.609643', 'files/2021/09/27/trigonometria.pdf', 2);
 
 -- user
-INSERT INTO USERS (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (1, '!H1HpGky6GD5rhKcjWW3SqwKPhAdsBrPsMHr2d2cx', null, 1, '', '', 1, 1, '2021-10-06 18:41:11.160023', 'diana@gmail.com');
+INSERT INTO USERS (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (1, '!H1HpGky6GD5rhKcjWW3SqwKPhAdsBrPsMHr2d2cx', null, true, '', '', true, true, '2021-10-06 18:41:11.160023', 'diana@gmail.com');
 

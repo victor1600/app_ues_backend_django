@@ -7,8 +7,7 @@ services:
     volumes:
     - .:/app
     environment:
-      - DEBUG=${DEBUG}
       - MANAGED=${MANAGED}
       - SECRET_KEY=${SECRET_KEY}
       - REQUIRE_PERMISSION_CHECK=${REQUIRE_PERMISSION_CHECK}
-
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
