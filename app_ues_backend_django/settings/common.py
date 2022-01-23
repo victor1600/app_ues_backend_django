@@ -24,20 +24,9 @@ def truthiness(thing):
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Added one more "parent", because we moved the settings.py to a sub folder.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env('SECRET_KEY', 'django-insecure-e1iiz-og73%^z%cz3aklffj-$$ji9w+56fh(^usnt)1wsnk3d)')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-
-DEBUG = truthiness(get_env('DEBUG', 'false'))
-
-# Change this to site
-ALLOWED_HOSTS = ['*']
 
 # Application definition
 CORS_ORIGIN_ALLOW_ALL = True
@@ -96,28 +85,6 @@ WSGI_APPLICATION = 'app_ues_backend_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# PROD = truthiness(get_env('PROD', 'true'))
-if not DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': get_env('DB_NAME', 'backend'),
-            'USER': get_env('DB_USER', 'doadmin'),
-            'PASSWORD': get_env('DB_PASSWORD', 'phUQNbjqAQ8vPAAd'),
-            'HOST': get_env('DB_HOST', 'db-mysql-nyc3-42223-do-user-7412275-0.b.db.ondigitalocean.com'),
-            'PORT': get_env('DB_PORT', '25060'),
-        }
-    }
-    print("connect to PROD DB")
-
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-    print("connect to DEV DB")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
