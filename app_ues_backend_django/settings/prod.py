@@ -7,18 +7,9 @@ SECRET_KEY = get_env('SECRET_KEY')
 # Change this if deployed somewhere else.
 ALLOWED_HOSTS = ['app-ues-prod.herokuapp.com', 'localhost']
 
-# DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': get_env('DB_NAME', 'backend'),
-#             'USER': get_env('DB_USER', 'postgres'),
-#             'PASSWORD': get_env('DB_PASSWORD', 'postgres'),
-#             'HOST': get_env('DB_HOST', '192.168.0.11'),
-#             'PORT': get_env('DB_PORT', '5432'),
-#         }
-#     }
 
 DATABASES = {
+    # This allows to get the database config from DATABASE_URL env var.
     'default': dj_database_url.config()
 }
 
