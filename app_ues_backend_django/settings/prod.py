@@ -13,5 +13,3 @@ DATABASES = {
     # different type of db dynamically!
     'default': dj_database_url.config()
 }
-
-print("Connected to PROD")

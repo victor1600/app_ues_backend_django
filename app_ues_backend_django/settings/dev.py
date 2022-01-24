@@ -1,7 +1,5 @@
 from .common import *
 
-print("Connected to DEV")
-
 # Only required for prod.
 # ALLOWED_HOSTS = ['*']
 

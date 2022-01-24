@@ -13,7 +13,6 @@ from datetime import timedelta
 from pathlib import Path
 import os
 
-
 get_env = os.environ.get
 
 
@@ -26,7 +25,6 @@ def truthiness(thing):
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # Added one more "parent", because we moved the settings.py to a sub folder.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
 
 # Application definition
 CORS_ORIGIN_ALLOW_ALL = True
@@ -142,7 +140,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'users.backends.CustomAuthBackend'
@@ -221,3 +218,4 @@ LOGGING = {
     }
 }
 
+# TODO: persist images in S3 or similar
