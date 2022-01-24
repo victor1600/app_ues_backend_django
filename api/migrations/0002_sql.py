@@ -4,7 +4,11 @@ from django.conf import settings
 
 def load_data_from_sql():
     import os
-    sql_statements = open(os.path.realpath(f'api/sql/seed_data.sql'), 'r').read()
+    if 'postgres' in settings.DATABASE_URL:
+        sql_file = 'seed_data_postgres.sql'
+    else:
+        sql_file = 'seed_data.sql'
+    sql_statements = open(os.path.realpath(f'api/sql/{sql_file}'), 'r').read()
     return sql_statements
 
 
