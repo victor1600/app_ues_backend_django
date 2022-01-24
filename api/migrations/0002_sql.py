@@ -1,10 +1,10 @@
 from django.db import migrations
-from django.conf import settings
+import os
 
 
 def load_data_from_sql():
     import os
-    if 'postgres' in settings.DATABASE_URL:
+    if 'postgres' in os.environ.get('DATABASE_URL'):
         sql_file = 'seed_data_postgres.sql'
     else:
         sql_file = 'seed_data.sql'
