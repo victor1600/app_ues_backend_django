@@ -16,6 +16,7 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     # All images/files get upload to media folder, but here,
     # we define the actual folder well be using inside the media folder.
+    # TODO: instead of image, consider sending material icons
     icon = models.ImageField(upload_to='photos/icons/%Y/%m/%d/')
     active = models.PositiveSmallIntegerField(default=1)
 
