@@ -3,3 +3,10 @@
 ```shell
 docker-compose up
 ```
+
+
+## Push changes to heroku
+
+```shell
+git push heroku master
+```
