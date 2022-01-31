@@ -25,11 +25,14 @@ class Course(models.Model):
 
     class Meta:
         managed = settings.MANAGED
+        # TODO: refactor table names
         db_table = 'COURSES'
+        ordering = ['created_at']
 
 
 class Topic(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    # TODO: analyze if should be unique or not...
+    name = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -41,6 +44,7 @@ class Topic(models.Model):
     class Meta:
         managed = settings.MANAGED
         db_table = 'TOPICS'
+        ordering = ['name','created_at']
 
 
 class SupplementaryMaterial(models.Model):
