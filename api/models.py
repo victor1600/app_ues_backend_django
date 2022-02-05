@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.core.exceptions import ValidationError
 
 
 # Create your models here.
@@ -10,7 +9,6 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     # All images/files get upload to media folder, but here,
     # we define the actual folder well be using inside the media folder.
-    # TODO: instead of image, consider sending material icons
     icon = models.ImageField(upload_to='photos/icons/%Y/%m/%d/')
     active = models.BooleanField(default=True)
 

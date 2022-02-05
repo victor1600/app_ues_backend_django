@@ -5,8 +5,6 @@ from django.utils.html import format_html, urlencode
 from django.urls import reverse
 
 
-# admin.site.register(Answer)
-
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ['answer_text', 'is_right_answer', 'pregunta']
