@@ -44,9 +44,11 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'django_filters',
     'corsheaders',
+    "debug_toolbar",
 ]
 #
 MIDDLEWARE = [
+"debug_toolbar.middleware.DebugToolbarMiddleware",
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 
 ]
 

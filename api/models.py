@@ -3,12 +3,6 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 
-def validate_zero_or_one(value):
-    if value != 0 or value != 1:
-        raise ValidationError("Expected 0 or 1"
-                              )
-
-
 # Create your models here.
 class Course(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -18,7 +12,7 @@ class Course(models.Model):
     # we define the actual folder well be using inside the media folder.
     # TODO: instead of image, consider sending material icons
     icon = models.ImageField(upload_to='photos/icons/%Y/%m/%d/')
-    active = models.PositiveSmallIntegerField(default=1)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -26,7 +20,6 @@ class Course(models.Model):
     class Meta:
         managed = settings.MANAGED
         # TODO: refactor table names
-        db_table = 'COURSES'
         ordering = ['created_at']
 
 
@@ -36,18 +29,17 @@ class Topic(models.Model):
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    active = models.PositiveSmallIntegerField(default=1)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         managed = settings.MANAGED
-        db_table = 'TOPICS'
-        ordering = ['name','created_at']
+        ordering = ['name', 'created_at']
 
 
-class SupplementaryMaterial(models.Model):
+class Material(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
@@ -59,7 +51,6 @@ class SupplementaryMaterial(models.Model):
 
     class Meta:
         managed = settings.MANAGED
-        db_table = 'SUPPLEMENTARY_MATERIALS'
 
 
 class Question(models.Model):
@@ -68,14 +59,13 @@ class Question(models.Model):
     # TODO: fix this.
     question_image = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', blank=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    active = models.PositiveSmallIntegerField(default=1)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.question_text
 
     class Meta:
         managed = settings.MANAGED
-        db_table = 'QUESTIONS'
 
 
 class Answer(models.Model):
@@ -83,12 +73,10 @@ class Answer(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     is_right_answer = models.BooleanField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
-    active = models.PositiveSmallIntegerField(default=1, validators=[validate_zero_or_one])
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.answer_text
 
     class Meta:
         managed = settings.MANAGED
-        db_table = 'ANSWERS'
-

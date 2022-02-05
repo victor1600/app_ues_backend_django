@@ -3,12 +3,13 @@ import os
 
 
 def load_data_from_sql():
+
     import os
     if 'postgres' in os.environ.get('DATABASE_URL'):
         # For this to succeed, the db needs to be named "backend"
-        sql_file = 'seed_data_postgres.sql'
+        sql_file = '../sql/seed_data_postgres.sql'
     else:
-        sql_file = 'seed_data.sql'
+        sql_file = '../sql/seed_data.sql'
     sql_statements = open(os.path.realpath(f'api/sql/{sql_file}'), 'r').read()
     return sql_statements
 

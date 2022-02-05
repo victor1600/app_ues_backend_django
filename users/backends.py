@@ -1,5 +1,5 @@
 from django.contrib.auth.backends import BaseBackend
-from .models import CustomUser as User
+from .models import CustomUser
 from .utils import authenticate
 
 
@@ -8,4 +8,4 @@ class CustomAuthBackend(BaseBackend):
         return authenticate(email=username, password=password)
 
     def get_user(self, user_id):
-        return User.objects.filter(pk=user_id).first()
+        return CustomUser.objects.filter(pk=user_id).first()

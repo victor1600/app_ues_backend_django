@@ -1,12 +1,11 @@
 from django.db.models import Q
-from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 import logging
 from .serializers import *
-from .models import  *
+from .models import *
 from rest_framework import viewsets, status
 
 logger = logging.getLogger(__name__)
@@ -18,9 +17,9 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
 
 
-class SupplementaryMaterialViewSet(viewsets.ModelViewSet):
-    queryset = SupplementaryMaterial.objects.all()
-    serializer_class = SupplementaryMaterialSerializer
+class MaterialViewSet(viewsets.ModelViewSet):
+    queryset = Material.objects.all()
+    serializer_class = MaterialSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['topic']
 
@@ -67,7 +66,7 @@ class GradeView(APIView):
         if serializer.is_valid():
             answer_ids = serializer.data.get("answers")
 
-            grade = Answer.objects.filter(Q(pk__in=answer_ids) & Q(is_right_answer=True))\
-                        .count()/len(answer_ids) * 10
-            return Response({"grade": round(grade,2)}, status=status.HTTP_200_OK)
+            grade = Answer.objects.filter(Q(pk__in=answer_ids) & Q(is_right_answer=True)) \
+                        .count() / len(answer_ids) * 10
+            return Response({"grade": round(grade, 2)}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

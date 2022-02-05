@@ -1,7 +1,20 @@
 from .common import *
 
 # Only required for prod.
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    "0.0.0.0"
+    # ...
+]
+
+def show_toolbar(request):
+    return True
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+}
 
 DEBUG = True
 # SECURITY WARNING: keep the secret key used in production secret!
