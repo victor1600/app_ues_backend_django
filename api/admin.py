@@ -65,7 +65,7 @@ class TopicAdmin(admin.ModelAdmin):
     @admin.display(ordering='material_count')
     def materiales_por_tema(self, topic):
         url = (
-                reverse('admin:material_changelist')
+                reverse('admin:api_material_changelist')
                 + '?'
                 + urlencode({
             'topic__id': str(topic.id)
