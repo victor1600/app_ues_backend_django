@@ -4,14 +4,25 @@ from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
 
-# Register your models here.
 
-admin.site.register(Material)
-# admin.site.register(Topic)
-admin.site.register(Answer)
+# admin.site.register(Answer)
+
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ['answer_text', 'is_right_answer', 'pregunta']
+    list_select_related = ['question']
+
+    def pregunta(self, answer):
+        # Connect to parent
+        url = reverse('admin:api_question_change', args=(answer.question.id,))
+        return format_html('<a href="{}">{}</a>', url, answer.question.question_text)
 
 
-# admin.site.register(Question)
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    list_display = ['name', 'file', 'topic']
+    list_select_related = ['topic']
+
 
 
 @admin.register(Course)
@@ -84,9 +95,27 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ['question_text', 'tema']
+    list_display = ['question_text', 'question_image','tema', 'respuestas']
     list_select_related = ['topic']
 
     def tema(self, question):
         url = reverse('admin:api_topic_change', args=(question.topic.id,))
         return format_html('<a href="{}">{}</a>', url, question.topic.name)
+
+    @admin.display(ordering='answers_count')
+    def respuestas(self, question):
+        url = (
+                reverse('admin:api_answer_changelist')
+                + '?'
+                + urlencode({
+            'question__id': str(question.id)
+        }))
+        if question.answers_count == 0:
+            return question.answers_count
+        else:
+            return format_html('<a href="{}">{}</a>', url, question.answers_count)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            answers_count=Count('answers'),
+        )
