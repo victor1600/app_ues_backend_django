@@ -8,6 +8,7 @@ from django.urls import reverse
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ['answer_text', 'is_right_answer', 'pregunta']
+    list_editable = ['is_right_answer']
     list_select_related = ['question']
 
     def pregunta(self, answer):
@@ -25,7 +26,7 @@ class MaterialAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description', 'created_at', 'temas_por_materia']
+    list_display = ['name', 'temas_por_materia']
 
     @admin.display(ordering='topics_count')
     def temas_por_materia(self, course):
@@ -49,8 +50,11 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ['name', 'created_at', 'curso', 'preguntas_por_tema', 'materiales_por_tema']
+    list_display = ['name','curso', 'preguntas_por_tema', 'materiales_por_tema']
     list_select_related = ['course']
+    list_per_page = 10
+    # Lookup types
+    search_fields = ['name__istartswith']
 
     def curso(self, topic):
         # Connect to parent
