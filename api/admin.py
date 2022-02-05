@@ -5,25 +5,6 @@ from django.utils.html import format_html, urlencode
 from django.urls import reverse
 
 
-@admin.register(Answer)
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['answer_text', 'is_right_answer', 'pregunta']
-    list_editable = ['is_right_answer']
-    list_select_related = ['question']
-
-    def pregunta(self, answer):
-        # Connect to parent
-        url = reverse('admin:api_question_change', args=(answer.question.id,))
-        return format_html('<a href="{}">{}</a>', url, answer.question.question_text)
-
-
-@admin.register(Material)
-class MaterialAdmin(admin.ModelAdmin):
-    list_display = ['name', 'file', 'topic']
-    list_select_related = ['topic']
-
-
-
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ['name', 'temas_por_materia']
@@ -99,6 +80,7 @@ class TopicAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ['question_text', 'question_image','tema', 'respuestas']
     list_select_related = ['topic']
+    search_fields = ['question_text__istartswith']
 
     def tema(self, question):
         url = reverse('admin:api_topic_change', args=(question.topic.id,))
@@ -121,3 +103,23 @@ class QuestionAdmin(admin.ModelAdmin):
         return super().get_queryset(request).annotate(
             answers_count=Count('answers'),
         )
+
+
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ['answer_text', 'is_right_answer', 'pregunta']
+    list_editable = ['is_right_answer']
+    list_select_related = ['question']
+    search_fields = ['answer_text__istartswith']
+
+    def pregunta(self, answer):
+        # Connect to parent
+        url = reverse('admin:api_question_change', args=(answer.question.id,))
+        return format_html('<a href="{}">{}</a>', url, answer.question.question_text)
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    list_display = ['name', 'file', 'topic']
+    list_select_related = ['topic']
+    search_fields = ['name__istartswith']
