@@ -14,7 +14,7 @@ INSERT INTO api_topic (id, name, description, created_at, active, course_id) VAL
 INSERT INTO api_topic (id, name, description, created_at, active, course_id) VALUES (5, 'Planteamiento de ecuaciones', '', '2022-02-05 21:20:20.877402', 1, 1);
 
 -- Material
-INSERT INTO api_material (id, name, description, created_at, file, topic_id) VALUES (1, 'Identidades Trigonométricas Fundamentales', '', '2022-02-05 20:51:25.420215', 'files/2022/02/05/trigonometria.pdf', 1);
+INSERT INTO api_material (id, name, description, created_at, file, topic_id,active) VALUES (1, 'Identidades Trigonométricas Fundamentales', '', '2022-02-05 20:51:25.420215', 'files/2022/02/05/trigonometria.pdf', 1, 1);
 
 
 -- Question

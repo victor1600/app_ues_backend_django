@@ -43,6 +43,7 @@ class Material(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     file = models.FileField(upload_to='files/%Y/%m/%d/')
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

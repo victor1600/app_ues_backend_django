@@ -13,26 +13,27 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()
+    # When getting elements, just the actives ones will be returned
+    queryset = Course.objects.filter(active=True)
     serializer_class = CourseSerializer
 
 
 class MaterialViewSet(viewsets.ModelViewSet):
-    queryset = Material.objects.all()
+    queryset = Material.objects.filter(active=True)
     serializer_class = MaterialSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['topic']
 
 
 class TopicViewSet(viewsets.ModelViewSet):
-    queryset = Topic.objects.all()
+    queryset = Topic.objects.filter(active=True)
     serializer_class = TopicSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['course']
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
-    queryset = Question.objects.all()
+    queryset = Question.objects.filter(active=True)
     serializer_class = QuestionSerializer
 
 
@@ -42,7 +43,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
 
 class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Question.objects.all()
+    # Get just active questions in the exam
+    queryset = Question.objects.filter(active=True)
     serializer_class = ExamQuestionsAndAnswersSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['topic']

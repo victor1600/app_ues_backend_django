@@ -7,7 +7,8 @@ from django.urls import reverse
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'temas_por_materia']
+    list_display = ['name', 'temas_por_materia','active']
+    list_editable = ['active']
 
     @admin.display(ordering='topics_count')
     def temas_por_materia(self, course):
@@ -31,9 +32,11 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ['name','curso', 'preguntas_por_tema', 'materiales_por_tema']
-    list_select_related = ['course']
+    list_display = ['name','curso', 'preguntas_por_tema', 'materiales_por_tema', 'active']
+    list_editable = ['active']
+    list_filter = ['course']
     list_per_page = 10
+    list_select_related = ['course']
     # Lookup types
     search_fields = ['name__istartswith']
 
@@ -78,7 +81,10 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ['question_text', 'question_image','tema', 'respuestas']
+    list_display = ['question_text', 'question_image','tema', 'respuestas', 'active']
+    list_editable = ['active']
+    list_filter = ['topic__course', 'topic']
+    list_per_page = 10
     list_select_related = ['topic']
     search_fields = ['question_text__istartswith']
 
@@ -109,6 +115,10 @@ class QuestionAdmin(admin.ModelAdmin):
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ['answer_text', 'is_right_answer', 'pregunta']
     list_editable = ['is_right_answer']
+    # filtering by grandparent
+    # TODO: Considering if in filtering we should add 'question'
+    list_filter = ['question__topic']
+    list_per_page = 10
     list_select_related = ['question']
     search_fields = ['answer_text__istartswith']
 
@@ -120,6 +130,9 @@ class AnswerAdmin(admin.ModelAdmin):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ['name', 'file', 'topic']
+    list_display = ['name', 'file', 'topic', 'active']
+    list_editable = ['active']
+    list_filter = ['topic__course', 'topic']
+    list_per_page = 10
     list_select_related = ['topic']
     search_fields = ['name__istartswith']
