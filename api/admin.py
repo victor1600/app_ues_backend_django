@@ -5,10 +5,32 @@ from django.utils.html import format_html, urlencode
 from django.urls import reverse
 
 
+class TopicItemInline(admin.TabularInline):
+    model = Topic
+    extra = 0
+
+
+class QuestionItemInline(admin.TabularInline):
+    model = Question
+    extra = 0
+
+
+class MaterialItemInline(admin.TabularInline):
+    model = Material
+    extra = 0
+
+
+class AnswerItemInline(admin.TabularInline):
+    model = Answer
+    extra = 0
+
+
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'temas_por_materia','active']
+    list_display = ['name', 'temas_por_materia', 'active']
     list_editable = ['active']
+    inlines = [TopicItemInline]
+    search_fields = ['name']
 
     @admin.display(ordering='topics_count')
     def temas_por_materia(self, course):
@@ -32,7 +54,9 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ['name','curso', 'preguntas_por_tema', 'materiales_por_tema', 'active']
+    autocomplete_fields = ['course']
+    inlines = [QuestionItemInline, MaterialItemInline]
+    list_display = ['name', 'curso', 'preguntas_por_tema', 'materiales_por_tema', 'active']
     list_editable = ['active']
     list_filter = ['course']
     list_per_page = 10
@@ -81,7 +105,9 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ['question_text', 'question_image','tema', 'respuestas', 'active']
+    autocomplete_fields = ['topic']
+    inlines = [AnswerItemInline]
+    list_display = ['question_text', 'question_image', 'tema', 'respuestas', 'active']
     list_editable = ['active']
     list_filter = ['topic__course', 'topic']
     list_per_page = 10
@@ -113,6 +139,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['question']
     list_display = ['answer_text', 'is_right_answer', 'pregunta']
     list_editable = ['is_right_answer']
     # filtering by grandparent
@@ -130,6 +157,7 @@ class AnswerAdmin(admin.ModelAdmin):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['topic']
     list_display = ['name', 'file', 'topic', 'active']
     list_editable = ['active']
     list_filter = ['topic__course', 'topic']

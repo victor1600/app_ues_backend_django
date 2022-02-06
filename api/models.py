@@ -70,8 +70,8 @@ class Question(models.Model):
 class Answer(models.Model):
     answer_text = models.CharField(max_length=400)
     created_at = models.DateTimeField(auto_now=True, blank=True)
-    is_right_answer = models.BooleanField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+    is_right_answer = models.BooleanField()
     active = models.BooleanField(default=True)
 
     def __str__(self):
