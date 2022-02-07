@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  backend:
+  web:
     build: .
     command: ./wait-for-it.sh mysql:3306 -- ./docker-entrypoint.sh
     ports:
@@ -10,6 +10,8 @@ services:
     restart: on-failure
     volumes:
     - .:/app
+    - static_volume:/app/static
+    - media_volume:/app/media
     environment:
       - MANAGED=${MANAGED}
       - SECRET_KEY=${SECRET_KEY}
@@ -29,6 +31,16 @@ services:
       - MYSQL_ROOT_PASSWORD=appues
     volumes:
       - mysqldata:/var/lib/mysql
+      - media_volume:/app/media
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/app/static
+    ports:
+      - 1337:80
+    depends_on:
+      - web
 
   tests:
     build: .
@@ -42,3 +54,5 @@ services:
 
 volumes:
   mysqldata:
+  static_volume:
+  media_volume:
