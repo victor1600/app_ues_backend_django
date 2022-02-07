@@ -2,8 +2,12 @@ version: '3.3'
 services:
   backend:
     build: .
+    command: ./wait-for-it.sh mysql:3306 -- ./docker-entrypoint.sh
     ports:
       - 8000:8000
+    depends_on:
+      - mysql
+    restart: on-failure
     volumes:
     - .:/app
     environment:
@@ -12,3 +16,29 @@ services:
       - REQUIRE_PERMISSION_CHECK=${REQUIRE_PERMISSION_CHECK}
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
       - DATABASE_URL=${DATABASE_URL}
+
+  mysql:
+    image: mariadb
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      - MYSQL_USER=appues
+      - MYSQL_PASSWORD=appues
+      - MYSQL_DATABASE=backend
+      - MYSQL_ROOT_PASSWORD=appues
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  tests:
+    build: .
+    command: ./wait-for-it.sh mysql:3306 -- ptw
+    depends_on:
+      - mysql
+    tty: true
+    volumes:
+      - .:/app
+
+
+volumes:
+  mysqldata:
