@@ -1,6 +1,8 @@
 from .common import *
 import dj_database_url
-DEBUG = False
+
+# TODO: Change this later.
+DEBUG = True
 SECRET_KEY = get_env('SECRET_KEY')
 
 # Only required for prod.
