@@ -30,6 +30,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 CORS_ORIGIN_ALLOW_ALL = True
 
 INSTALLED_APPS = [
+    'admin_interface',
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +48,9 @@ INSTALLED_APPS = [
     'corsheaders',
     "debug_toolbar",
 ]
-#
+
+X_FRAME_OPTIONS='SAMEORIGIN'
+
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'corsheaders.middleware.CorsMiddleware',

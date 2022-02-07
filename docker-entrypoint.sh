@@ -1,9 +1,11 @@
 #!/bin/bash
 
 echo "performing migrations"
+python manage.py makemigrations
 python manage.py makemigrations api
 python manage.py makemigrations users
 python manage.py migrate
+python manage.py collectstatic
 
 echo "running server"
 # for dev
