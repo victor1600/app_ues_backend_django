@@ -38,7 +38,7 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pregunta
-        fields = ('id', 'question_text', 'question_image', 'topic',  'answers')
+        fields = ('id', 'texto', 'imagen', 'tema',  'answers')
 
 
 class ExamResultSerializer(serializers.Serializer):

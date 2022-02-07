@@ -22,14 +22,14 @@ class MaterialViewSet(viewsets.ModelViewSet):
     queryset = Material.objects.filter(activo=True)
     serializer_class = MaterialSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['topic']
+    filterset_fields = ['tema']
 
 
 class TopicViewSet(viewsets.ModelViewSet):
     queryset = Tema.objects.filter(activo=True)
     serializer_class = TopicSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['course']
+    filterset_fields = ['curso']
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -47,7 +47,7 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Pregunta.objects.filter(activo=True)
     serializer_class = ExamQuestionsAndAnswersSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['topic']
+    filterset_fields = ['tema']
 
     def get_queryset(self):
         if 'limit' in self.request.query_params.keys():
@@ -68,7 +68,7 @@ class GradeView(APIView):
         if serializer.is_valid():
             answer_ids = serializer.data.get("answers")
 
-            grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(is_right_answer=True)) \
+            grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
                         .count() / len(answer_ids) * 10
             return Response({"grade": round(grade, 2)}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
