@@ -14,37 +14,37 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 class CourseViewSet(viewsets.ModelViewSet):
     # When getting elements, just the actives ones will be returned
-    queryset = Course.objects.filter(active=True)
+    queryset = Curso.objects.filter(activo=True)
     serializer_class = CourseSerializer
 
 
 class MaterialViewSet(viewsets.ModelViewSet):
-    queryset = Material.objects.filter(active=True)
+    queryset = Material.objects.filter(activo=True)
     serializer_class = MaterialSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['topic']
 
 
 class TopicViewSet(viewsets.ModelViewSet):
-    queryset = Topic.objects.filter(active=True)
+    queryset = Tema.objects.filter(activo=True)
     serializer_class = TopicSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['course']
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
-    queryset = Question.objects.filter(active=True)
+    queryset = Pregunta.objects.filter(activo=True)
     serializer_class = QuestionSerializer
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
-    queryset = Answer.objects.all()
+    queryset = Respuesta.objects.all()
     serializer_class = AnswerSerializer
 
 
 class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     # Get just active questions in the exam
-    queryset = Question.objects.filter(active=True)
+    queryset = Pregunta.objects.filter(activo=True)
     serializer_class = ExamQuestionsAndAnswersSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['topic']
@@ -68,7 +68,7 @@ class GradeView(APIView):
         if serializer.is_valid():
             answer_ids = serializer.data.get("answers")
 
-            grade = Answer.objects.filter(Q(pk__in=answer_ids) & Q(is_right_answer=True)) \
+            grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(is_right_answer=True)) \
                         .count() / len(answer_ids) * 10
             return Response({"grade": round(grade, 2)}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

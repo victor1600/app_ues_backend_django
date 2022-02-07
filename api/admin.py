@@ -1,17 +1,17 @@
 from django.contrib import admin
-from .models import Course, Material, Topic, Answer, Question
+from .models import Curso, Material, Tema, Respuesta, Pregunta
 from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
 
 
 class TopicItemInline(admin.TabularInline):
-    model = Topic
+    model = Tema
     extra = 0
 
 
 class QuestionItemInline(admin.TabularInline):
-    model = Question
+    model = Pregunta
     extra = 0
 
 
@@ -21,25 +21,25 @@ class MaterialItemInline(admin.TabularInline):
 
 
 class AnswerItemInline(admin.TabularInline):
-    model = Answer
+    model = Respuesta
     extra = 0
 
 
-@admin.register(Course)
+@admin.register(Curso)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'temas_por_materia', 'active']
-    list_editable = ['active']
+    list_display = ['texto','icono' ,'temas_por_materia', 'activo']
+    list_editable = ['activo']
     inlines = [TopicItemInline]
-    search_fields = ['name']
+    search_fields = ['texto']
 
     @admin.display(ordering='topics_count')
     def temas_por_materia(self, course):
         # Connect to children
         url = (
-                reverse('admin:api_topic_changelist')
+                reverse('admin:api_tema_changelist')
                 + '?'
                 + urlencode({
-            'course__id': str(course.id)
+            'curso__id': str(course.id)
         }))
         if course.topics_count == 0:
             return course.topics_count
@@ -48,35 +48,35 @@ class CourseAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
-            topics_count=Count('topic')
+            topics_count=Count('tema')
         )
 
 
-@admin.register(Topic)
+@admin.register(Tema)
 class TopicAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['course']
+    autocomplete_fields = ['curso']
     inlines = [QuestionItemInline, MaterialItemInline]
-    list_display = ['name', 'curso', 'preguntas_por_tema', 'materiales_por_tema', 'active']
-    list_editable = ['active']
-    list_filter = ['course']
+    list_display = ['texto', 'curso', 'preguntas_por_tema', 'materiales_por_tema', 'activo']
+    list_editable = ['activo']
+    list_filter = ['curso']
     list_per_page = 10
-    list_select_related = ['course']
+    list_select_related = ['curso']
     # Lookup types
-    search_fields = ['name__istartswith']
+    search_fields = ['texto__istartswith']
 
     def curso(self, topic):
         # Connect to parent
-        url = reverse('admin:api_course_change', args=(topic.course.id,))
-        return format_html('<a href="{}">{}</a>', url, topic.course.name)
+        url = reverse('admin:api_curso_change', args=(topic.curso.id,))
+        return format_html('<a href="{}">{}</a>', url, topic.curso.texto)
 
     @admin.display(ordering='questions_count')
     def preguntas_por_tema(self, topic):
         # Connect to children
         url = (
-                reverse('admin:api_question_changelist')
+                reverse('admin:api_pregunta_changelist')
                 + '?'
                 + urlencode({
-            'topic__id': str(topic.id)
+            'tema__id': str(topic.id)
         }))
         if topic.questions_count == 0:
             return topic.questions_count
@@ -89,7 +89,7 @@ class TopicAdmin(admin.ModelAdmin):
                 reverse('admin:api_material_changelist')
                 + '?'
                 + urlencode({
-            'topic__id': str(topic.id)
+            'tema__id': str(topic.id)
         }))
         if topic.material_count == 0:
             return topic.material_count
@@ -98,33 +98,33 @@ class TopicAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
-            questions_count=Count('question'),
+            questions_count=Count('pregunta'),
             material_count=Count('material')
         )
 
 
-@admin.register(Question)
+@admin.register(Pregunta)
 class QuestionAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['topic']
+    autocomplete_fields = ['tema']
     inlines = [AnswerItemInline]
-    list_display = ['question_text', 'question_image', 'tema', 'respuestas', 'active']
-    list_editable = ['active']
-    list_filter = ['topic__course', 'topic']
+    list_display = ['texto', 'imagen', 'tema', 'respuestas', 'activo']
+    list_editable = ['activo']
+    list_filter = ['tema__curso', 'tema']
     list_per_page = 10
-    list_select_related = ['topic']
-    search_fields = ['question_text__istartswith']
+    list_select_related = ['tema']
+    search_fields = ['exto__istartswith']
 
     def tema(self, question):
-        url = reverse('admin:api_topic_change', args=(question.topic.id,))
-        return format_html('<a href="{}">{}</a>', url, question.topic.name)
+        url = reverse('admin:api_tema_change', args=(question.tema.id,))
+        return format_html('<a href="{}">{}</a>', url, question.tema.texto)
 
     @admin.display(ordering='answers_count')
     def respuestas(self, question):
         url = (
-                reverse('admin:api_answer_changelist')
+                reverse('admin:api_respuesta_changelist')
                 + '?'
                 + urlencode({
-            'question__id': str(question.id)
+            'pregunta__id': str(question.id)
         }))
         if question.answers_count == 0:
             return question.answers_count
@@ -137,30 +137,30 @@ class QuestionAdmin(admin.ModelAdmin):
         )
 
 
-@admin.register(Answer)
+@admin.register(Respuesta)
 class AnswerAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['question']
-    list_display = ['answer_text', 'is_right_answer', 'pregunta']
-    list_editable = ['is_right_answer']
+    autocomplete_fields = ['pregunta']
+    list_display = ['texto', 'es_respuesta_correcta', 'pregunta']
+    list_editable = ['es_respuesta_correcta']
     # filtering by grandparent
     # TODO: Considering if in filtering we should add 'question'
-    list_filter = ['question__topic']
+    list_filter = ['pregunta__tema']
     list_per_page = 10
-    list_select_related = ['question']
-    search_fields = ['answer_text__istartswith']
+    list_select_related = ['pregunta']
+    search_fields = ['texto__istartswith']
 
     def pregunta(self, answer):
         # Connect to parent
-        url = reverse('admin:api_question_change', args=(answer.question.id,))
-        return format_html('<a href="{}">{}</a>', url, answer.question.question_text)
+        url = reverse('admin:api_pregunta_change', args=(answer.pregunta.id,))
+        return format_html('<a href="{}">{}</a>', url, answer.pregunta.texto)
 
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['topic']
-    list_display = ['name', 'file', 'topic', 'active']
-    list_editable = ['active']
-    list_filter = ['topic__course', 'topic']
+    autocomplete_fields = ['tema']
+    list_display = ['texto', 'archivo', 'tema', 'activo']
+    list_editable = ['activo']
+    list_filter = ['tema__curso', 'tema']
     list_per_page = 10
-    list_select_related = ['topic']
-    search_fields = ['name__istartswith']
+    list_select_related = ['tema']
+    search_fields = ['texto__istartswith']
