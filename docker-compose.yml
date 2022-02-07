@@ -31,12 +31,12 @@ services:
       - MYSQL_ROOT_PASSWORD=appues
     volumes:
       - mysqldata:/var/lib/mysql
-      - media_volume:/app/media
 
   nginx:
     build: ./nginx
     volumes:
       - static_volume:/app/static
+      - media_volume:/app/media
     ports:
       - 1337:80
     depends_on:
