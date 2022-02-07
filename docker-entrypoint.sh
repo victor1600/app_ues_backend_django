@@ -5,6 +5,7 @@ python manage.py makemigrations
 python manage.py makemigrations api
 python manage.py makemigrations users
 python manage.py migrate
+# add if clause, if folder exists, don't do this.
 python manage.py collectstatic
 
 echo "running server"
