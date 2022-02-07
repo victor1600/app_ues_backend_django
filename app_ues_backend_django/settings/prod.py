@@ -5,7 +5,7 @@ SECRET_KEY = get_env('SECRET_KEY')
 
 # Only required for prod.
 # Change this if deployed somewhere else.
-ALLOWED_HOSTS = ['app-ues-prod.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 
 DATABASES = {
