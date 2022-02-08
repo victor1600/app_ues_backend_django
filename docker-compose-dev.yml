@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+  web:
+    build: .
+    command: ./docker-entrypoint.sh
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+    restart: on-failure
+    volumes:
+    - .:/app
+    environment:
+      - MANAGED=${MANAGED}
+      - SECRET_KEY=${SECRET_KEY}
+      - REQUIRE_PERMISSION_CHECK=${REQUIRE_PERMISSION_CHECK}
+      - DJANGO_SETTINGS_MODULE=app_ues_backend_django.settings.dev
+
+
+
+
