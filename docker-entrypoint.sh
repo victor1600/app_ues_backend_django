@@ -19,6 +19,3 @@ else
   echo "Running app using inbuilt DEV server"
   python manage.py runserver 0.0.0.0:8000
 fi
-
-# for prod, added 0.0.0.0:8000 for running it local inside docker.
-#gunicorn --bind 0.0.0.0:8000 app_ues_backend_django.wsgi
