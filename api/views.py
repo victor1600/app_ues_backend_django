@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 class CourseViewSet(viewsets.ModelViewSet):
     # When getting elements, just the actives ones will be returned
-    queryset = Curso.objects.filter(activo=True)
+    queryset = Curso.objects.filter()
     serializer_class = CourseSerializer
     # permission_classes = [IsAdmin]
 
