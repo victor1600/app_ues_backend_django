@@ -1,12 +1,13 @@
 ## Run the project
 
+### Dev 
+
 ```shell
-docker-compose up
+docker-compose -f docker-compose.dev up
 ```
 
-
-## Push changes to heroku (Does not include file storage)
+### Prod
 
 ```shell
-git push heroku main
+docker-compose -f docker-compose.prod up
 ```

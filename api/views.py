@@ -16,6 +16,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     # When getting elements, just the actives ones will be returned
     queryset = Curso.objects.filter(activo=True)
     serializer_class = CourseSerializer
+    # permission_classes = [IsAdmin]
 
 
 class MaterialViewSet(viewsets.ModelViewSet):

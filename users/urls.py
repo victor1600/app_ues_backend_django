@@ -9,5 +9,6 @@ router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    # TODO: Redo users.
     url(r'login', views.UserLoginView.as_view()),
 ]

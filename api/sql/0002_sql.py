@@ -3,7 +3,7 @@ import os
 
 
 def load_data_from_sql():
-    sql_file = '../sql/seed_data.sql'
+    sql_file = 'seed_data.sql'
     sql_statements = open(os.path.realpath(f'api/sql/{sql_file}'), 'r').read()
     return sql_statements
 

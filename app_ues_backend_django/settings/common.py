@@ -224,4 +224,3 @@ LOGGING = {
     }
 }
 
-# TODO: persist images in S3 or similar
