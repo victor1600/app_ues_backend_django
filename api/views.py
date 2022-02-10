@@ -12,33 +12,32 @@ logger = logging.getLogger(__name__)
 
 
 # Create your views here.
-class CourseViewSet(viewsets.ModelViewSet):
+class CourseViewSet(viewsets.ReadOnlyModelViewSet):
     # When getting elements, just the actives ones will be returned
     queryset = Curso.objects.filter()
     serializer_class = CourseSerializer
-    # permission_classes = [IsAdmin]
 
 
-class MaterialViewSet(viewsets.ModelViewSet):
+class MaterialViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Material.objects.filter(activo=True)
     serializer_class = MaterialSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tema']
 
 
-class TopicViewSet(viewsets.ModelViewSet):
+class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tema.objects.filter(activo=True)
     serializer_class = TopicSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['curso']
 
 
-class QuestionViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Pregunta.objects.filter(activo=True)
     serializer_class = QuestionSerializer
 
 
-class AnswerViewSet(viewsets.ModelViewSet):
+class AnswerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Respuesta.objects.all()
     serializer_class = AnswerSerializer
 
