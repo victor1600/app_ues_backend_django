@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
-    'users',
     'rest_framework',
     # 'rest_framework.authtoken',  # Add this line
     # 'rest_auth',
@@ -47,6 +46,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     "debug_toolbar",
+    'user'
 ]
 
 X_FRAME_OPTIONS='SAMEORIGIN'
@@ -142,13 +142,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Auth and JWT
-
-AUTH_USER_MODEL = 'users.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'users.backends.CustomAuthBackend'
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 REQUIRE_PERMISSION_CHECK = truthiness(get_env('REQUIRE_PERMISSION_CHECK', 'false'))
@@ -159,42 +155,6 @@ if REQUIRE_PERMISSION_CHECK:
         'rest_framework.permissions.IsAuthenticated',
     ]}
 
-# Jwt Authentication
-# https://github.com/jpadilla/django-rest-framework-jwt/blob/master/rest_framework_jwt/settings.py
-JWT_AUTH = {
-    'JWT_ENCODE_HANDLER':
-        'rest_framework_jwt.utils.jwt_encode_handler',
-
-    'JWT_DECODE_HANDLER':
-        'rest_framework_jwt.utils.jwt_decode_handler',
-
-    'JWT_PAYLOAD_HANDLER':
-        'rest_framework_jwt.utils.jwt_payload_handler',
-
-    'JWT_PAYLOAD_GET_USER_ID_HANDLER':
-        'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
-
-    'JWT_RESPONSE_PAYLOAD_HANDLER':
-        'rest_framework_jwt.utils.jwt_response_payload_handler',
-
-    'JWT_SECRET_KEY': 'SECRET_KEY',
-    'JWT_GET_USER_SECRET_KEY': None,
-    'JWT_PUBLIC_KEY': None,
-    'JWT_PRIVATE_KEY': None,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA': timedelta(days=30),
-    'JWT_AUDIENCE': None,
-    'JWT_ISSUER': None,
-
-    'JWT_ALLOW_REFRESH': False,
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=30),
-
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_AUTH_COOKIE': None,
-}
 
 LOGGING = {
     'version': 1,
@@ -224,3 +184,4 @@ LOGGING = {
     }
 }
 
+AUTH_USER_MODEL = 'user.User'

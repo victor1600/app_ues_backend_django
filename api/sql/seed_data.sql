@@ -29,7 +29,4 @@ INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo,
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (5, 'Alfredo Cristiani', '2022-02-05 21:36:20.241509', 0, 1, 2);
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (6, 'Gerardo Barrios', '2022-02-05 21:36:43.208453', 0, 1, 2);
 
--- User
-INSERT INTO USERS(id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (1, '!H1HpGky6GD5rhKcjWW3SqwKPhAdsBrPsMHr2d2cx', null, true, '', '', true, true, '2021-10-06 18:41:11.160023', 'victor@gmail.com');
-
 
