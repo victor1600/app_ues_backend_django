@@ -2,6 +2,7 @@
 
 echo "performing migrations"
 python manage.py makemigrations
+python manage.py makemigrations user
 python manage.py makemigrations api
 python manage.py migrate
 
