@@ -5,8 +5,6 @@ services:
     command: ./docker-entrypoint.sh
     ports:
       - 8000:8000
-    depends_on:
-      - mysql
     restart: on-failure
     volumes:
     - .:/app
