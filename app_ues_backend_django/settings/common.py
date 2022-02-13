@@ -38,15 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
     'rest_framework',
-    # 'rest_framework.authtoken',  # Add this line
-    # 'rest_auth',
     'django_cleanup.apps.CleanupConfig',
     'django_filters',
+    'djoser',
     'corsheaders',
     "debug_toolbar",
-    'user'
+    'user',
+    'api'
 ]
 
 X_FRAME_OPTIONS='SAMEORIGIN'

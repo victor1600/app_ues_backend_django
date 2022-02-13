@@ -79,3 +79,15 @@ class Respuesta(models.Model):
 
     class Meta:
         managed = settings.MANAGED
+
+
+class Aspirante(models.Model):
+    fecha_de_nacimiento = models.DateField(null=True, blank=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}'
+
+    class Meta:
+        ordering = ['user__first_name', 'user__last_name']
+    # TODO: define more fields

@@ -4,4 +4,6 @@ from django.db import models
 
 # Create your models here.
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
+    pass
+    # TODO: Consider if this field should be removed, or not
+    # email = models.EmailField(unique=True)
