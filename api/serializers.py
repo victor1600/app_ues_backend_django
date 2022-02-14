@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Curso, Material, Pregunta, Tema, Respuesta
+from .models import *
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -46,3 +46,10 @@ class ExamResultSerializer(serializers.Serializer):
     # question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
     answers = serializers.PrimaryKeyRelatedField(queryset=Respuesta.objects.all(), many=True)
 
+
+class AspiranteSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField()
+
+    class Meta:
+        model = Aspirante
+        fields = ['id', 'user_id', 'fecha_de_nacimiento']
