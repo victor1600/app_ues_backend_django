@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'corsheaders',
     "debug_toolbar",
     'user',
-    'api'
+    'api',
+    'rest_framework_simplejwt',
 ]
 
-X_FRAME_OPTIONS='SAMEORIGIN'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -141,32 +142,34 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
-# REQUIRE_PERMISSION_CHECK = truthiness(get_env('REQUIRE_PERMISSION_CHECK', 'false'))
-# if REQUIRE_PERMISSION_CHECK:
-REST_FRAMEWORK = {'DEFAULT_AUTHENTICATION_CLASSES': (
-    'rest_framework_simplejwt.authentication.JWTAuthentication',)
-# , 'DEFAULT_PERMISSION_CLASSES': [
-#     'rest_framework.permissions.IsAuthenticated',
-# ]
-}
+REQUIRE_PERMISSION_CHECK = truthiness(get_env('REQUIRE_PERMISSION_CHECK', 'false'))
+if REQUIRE_PERMISSION_CHECK:
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+            # 'rest_framework.permissions.IsAuthenticated',
 
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-}
-
-
-DJOSER = {
-    'SERIALIZERS': {
-        'user_create': 'user.serializers.UserCreateSerializer',
-        'current_user': 'user.serializers.UserSerializer',
+        ), 'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ]
     }
-}
+
+    SIMPLE_JWT = {
+       'AUTH_HEADER_TYPES': ('JWT',),
+        'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    }
+
+
+    DJOSER = {
+        'SERIALIZERS': {
+            'user_create': 'user.serializers.UserCreateSerializer',
+            'current_user': 'user.serializers.UserSerializer',
+        }
+    }
 
 LOGGING = {
     'version': 1,

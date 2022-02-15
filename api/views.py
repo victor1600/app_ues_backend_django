@@ -1,12 +1,15 @@
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 
 import logging
 
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .serializers import *
 from .models import *
@@ -81,3 +84,10 @@ class GradeView(APIView):
 class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin,UpdateModelMixin, GenericViewSet):
     queryset = Aspirante.objects.all()
     serializer_class = AspiranteSerializer
+
+    # The action will be under api/aspirantes/me
+    # if detail = True, the route would be api/aspirantes/1/me
+    @action(detail=False)
+    def me(self, request):
+        logger.info(request.user)
+        return Response(request.user.id)
