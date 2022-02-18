@@ -45,8 +45,9 @@ class TestRetrieveCourse:
     def test_if_course_exists_returns_200(self, api_client, authenticate):
         course = baker.make(Curso)
         authenticate()
-
         response = api_client.get(f'/api/courses/{course.id}/')
 
         assert response.status_code == status.HTTP_200_OK
+
+        # TODO: create test case to test if img is visible!!
 
