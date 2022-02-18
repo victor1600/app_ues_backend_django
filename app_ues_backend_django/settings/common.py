@@ -161,7 +161,7 @@ if REQUIRE_PERMISSION_CHECK:
     }
 
     SIMPLE_JWT = {
-       'AUTH_HEADER_TYPES': ('bearer',),
+       'AUTH_HEADER_TYPES': ('Bearer',),
         'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     }
 
