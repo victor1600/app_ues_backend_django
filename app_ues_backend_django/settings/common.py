@@ -143,7 +143,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend'
+    'user.backends.CustomAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+
 ]
 
 REQUIRE_PERMISSION_CHECK = truthiness(get_env('REQUIRE_PERMISSION_CHECK', 'false'))
@@ -151,15 +153,15 @@ if REQUIRE_PERMISSION_CHECK:
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
             'rest_framework_simplejwt.authentication.JWTAuthentication',
-            # 'rest_framework.permissions.IsAuthenticated',
 
-        ), 'DEFAULT_PERMISSION_CLASSES': [
+        )
+        , 'DEFAULT_PERMISSION_CLASSES': [
             'rest_framework.permissions.IsAuthenticated',
         ]
     }
 
     SIMPLE_JWT = {
-       'AUTH_HEADER_TYPES': ('JWT',),
+       'AUTH_HEADER_TYPES': ('bearer',),
         'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     }
 

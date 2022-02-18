@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
 
 import logging
 
@@ -81,13 +82,27 @@ class GradeView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin,UpdateModelMixin, GenericViewSet):
+class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = Aspirante.objects.all()
     serializer_class = AspiranteSerializer
 
     # The action will be under api/aspirantes/me
     # if detail = True, the route would be api/aspirantes/1/me
-    @action(detail=False)
+    @action(detail=False, methods=['GET', 'PUT'])
     def me(self, request):
+        print(request.user.is_superuser)
+        if request.user.is_anonymous:
+            return Response("Usuario no tiene perfil de aspirante asociado")
         logger.info(request.user)
-        return Response(request.user.id)
+        # aspirante = Aspirante.objects.get(user_id=request.user.id)
+        print(Aspirante.objects.first())
+        aspirante = get_object_or_404(Aspirante, user_id=request.user.id)
+        if request.method == 'GET':
+            logger.info(f'{request.user} ')
+            serializer = AspiranteSerializer(aspirante)
+            return Response(serializer.data)
+        elif request.method == 'PUT':
+            serializer = AspiranteSerializer(aspirante, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
