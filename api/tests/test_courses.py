@@ -1,27 +1,52 @@
-from io import StringIO
 import logging
-from django.conf import settings
-from rest_framework.test import APIClient
 from rest_framework import status
 from api.signals import test_finished
+from api.models import Curso
+from model_bakery import baker
 
 import pytest
 
 logger = logging.getLogger()
 
 
+# @pytest.fixture
+# def create_course(api_client):
+#     def do_create_course(course):
+#         # TODO: create objects using Objects.
+#         image_url = f'{settings.BASE_DIR}/icons/biologia.png'
+#         response = api_client.post('/api/courses/', {**course,
+#                                           'icono': open(image_url, 'rb')})
+#         # We can supply additional data using **kwargs
+#         if 'icono' in response.data:
+#             media_url_partial_path = response.data['icono'].split("testserver/")[1]
+#             # TODO: fix this:
+#             test_finished.send_robust(sender=None, media_url=media_url_partial_path)
+#         logger.info(response.status_code)
+#         return response
+#     return do_create_course
+
+
+# @pytest.mark.django_db
+# class TestCreateCourse:
+#     def test_if_user_is_anonymous_returns_401(self, api_client, create_course, authenticate):
+#         # authenticate()
+#         # TODO: Put this into a func
+#         response = create_course({'texto': 'a'})
+#         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 @pytest.mark.django_db
-class TestCreateCourse:
-    def test_if_user_is_anonymous_returns_401(self):
-        client = APIClient()
-        # TODO: Create test for uploading an image.
-        image_url = f'{settings.BASE_DIR}/icons/biologia.png'
-        response = client.post('/api/courses/', {'texto': 'a',
-                                                 'icono': open(image_url, 'rb')})
-        logger.info(response.data)
-        # We can supply additional data using **kwargs
-        if 'icono' in response.data:
-            media_url_partial_path = response.data['icono'].split("testserver/")[1]
-            test_finished.send_robust(sender=self.__class__, media_url=media_url_partial_path)
+class TestRetrieveCourse:
+    def test_if_user_is_anonymous_returns_401(self, api_client):
+        course = baker.make(Curso)
+        response = api_client.get(f'/api/courses/{course.id}/')
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_if_course_exists_returns_200(self, api_client, authenticate):
+        course = baker.make(Curso)
+        authenticate()
+
+        response = api_client.get(f'/api/courses/{course.id}/')
+
+        assert response.status_code == status.HTTP_200_OK
 
