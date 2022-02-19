@@ -4,7 +4,6 @@ from model_bakery import baker
 from api.models import *
 from logging import getLogger
 import random
-from functools import reduce
 
 logger = getLogger()
 
@@ -16,7 +15,6 @@ class TestExamQuestionFetching:
         Test if added question and answers are present on the general exam.
         """
         authenticate()
-        # right_answers = []
         for _ in range(random.randint(2, 20)):
             question = baker.make(Pregunta, texto='a')
             rand = random.randint(2, 5)
