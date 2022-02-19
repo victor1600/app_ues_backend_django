@@ -9,6 +9,7 @@ django-cors-headers
 djangorestframework-jwt
 django_cleanup
 djangorestframework_simplejwt
+locust
 gunicorn==20.1.0
 model_bakery
 mysqlclient==2.0.3
