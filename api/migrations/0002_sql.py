@@ -1,5 +1,6 @@
 from django.db import migrations
 import os
+import sys
 
 
 def load_data_from_sql():
@@ -21,6 +22,9 @@ class Migration(migrations.Migration):
         ('api', '0001_initial'),
     ]
 
-    operations = [
-        migrations.RunSQL(load_data_from_sql(), delete_data_with_sql())
-    ]
+    if 'test' not in sys.argv[0]:
+        # TODO: test this is working properly.
+        #  If pytest is controlling the migrations, don't do the initial populate.
+        operations = [
+            migrations.RunSQL(load_data_from_sql(), delete_data_with_sql())
+        ]
