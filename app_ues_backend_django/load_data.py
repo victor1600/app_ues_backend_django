@@ -14,6 +14,7 @@ django.setup()
 
 logger = getLogger()
 
+
 def get_files(path):
     return list(filter(lambda x: '.DS_Store' not in x, os.listdir(path)))
 

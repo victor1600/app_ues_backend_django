@@ -4,7 +4,7 @@ from django.conf import settings
 
 # Create your models here.
 class Curso(models.Model):
-    texto = models.CharField(max_length=50, unique=True)
+    texto = models.CharField(max_length=255, unique=True)
     descripcion = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     # All images/files get upload to media folder, but here,
@@ -23,7 +23,7 @@ class Curso(models.Model):
 
 class Tema(models.Model):
     # TODO: analyze if should be unique or not...
-    texto = models.CharField(max_length=50)
+    texto = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
@@ -38,10 +38,10 @@ class Tema(models.Model):
 
 
 class Material(models.Model):
-    texto = models.CharField(max_length=50, unique=True)
+    texto = models.CharField(max_length=2000, unique=True)
     descripcion = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
-    archivo = models.FileField(upload_to='files/%Y/%m/%d/')
+    archivo = models.FileField(upload_to='files/%Y/%m/%d/', max_length=2000)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
 
@@ -68,7 +68,7 @@ class Pregunta(models.Model):
 
 
 class Respuesta(models.Model):
-    texto = models.CharField(max_length=400)
+    texto = models.CharField(max_length=600)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE, related_name='answers')
     es_respuesta_correcta = models.BooleanField()
