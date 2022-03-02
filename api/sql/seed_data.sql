@@ -17,18 +17,18 @@ INSERT INTO api_tema  (id, texto, descripcion, created_at, activo, curso_id) VAL
 INSERT INTO api_material (id, texto, descripcion, created_at, archivo, tema_id,activo) VALUES (1, 'Identidades Trigonométricas Fundamentales', '', '2022-02-05 20:51:25.420215', 'files/2022/02/05/trigonometria.pdf', 1, 1);
 
 --
--- -- Question
-INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, tema_id) VALUES (1, 'La tangente es igual a:', '2022-02-05 20:53:06.399142', '', 1, 1);
-INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, tema_id) VALUES (2, 'Primer presidente de El Salvador:', '2022-02-05 21:35:22.722240', 'photos/question_images/2022/02/05/arce_manuel_jose.jpeg', 1, 3);
-
--- -- Answer
-INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (1, 'sin/cos', '2022-02-05 20:55:02.453068', 1, 1, 1);
-INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (2, 'cos/sin', '2022-02-05 20:55:09.765403', 0, 1, 1);
-INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (3, 'sin', '2022-02-05 20:55:25.729697', 0, 1, 1);
-INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (4, 'Manuel José Arce', '2022-02-05 21:36:02.025145', 1, 1, 2);
-INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (5, 'Alfredo Cristiani', '2022-02-05 21:36:20.241509', 0, 1, 2);
-INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (6, 'Gerardo Barrios', '2022-02-05 21:36:43.208453', 0, 1, 2);
-
+-- -- -- Question
+-- INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, tema_id) VALUES (1, 'La tangente es igual a:', '2022-02-05 20:53:06.399142', '', 1, 1);
+-- INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, tema_id) VALUES (2, 'Primer presidente de El Salvador:', '2022-02-05 21:35:22.722240', 'photos/question_images/2022/02/05/arce_manuel_jose.jpeg', 1, 3);
+--
+-- -- -- Answer
+-- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (1, 'sin/cos', '2022-02-05 20:55:02.453068', 1, 1, 1);
+-- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (2, 'cos/sin', '2022-02-05 20:55:09.765403', 0, 1, 1);
+-- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (3, 'sin', '2022-02-05 20:55:25.729697', 0, 1, 1);
+-- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (4, 'Manuel José Arce', '2022-02-05 21:36:02.025145', 1, 1, 2);
+-- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (5, 'Alfredo Cristiani', '2022-02-05 21:36:20.241509', 0, 1, 2);
+-- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (6, 'Gerardo Barrios', '2022-02-05 21:36:43.208453', 0, 1, 2);
+--
 
 -- User
 INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (1, 'pbkdf2_sha256$260000$QO6W0kSBNV54iF4lmOjPqr$17ElHqt1eg/MG4+rpJ7kipZlcBhl18aPwZLWdCWCExs=', '2022-02-12 18:08:38.807751', 1, 'admin', '', '', 1, 1, '2022-02-12 18:08:33.112459', 'admin@gmail.com');

@@ -140,7 +140,7 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(Respuesta)
 class AnswerAdmin(admin.ModelAdmin):
     autocomplete_fields = ['pregunta']
-    list_display = ['texto', 'es_respuesta_correcta', 'pregunta']
+    list_display = ['texto', 'es_respuesta_correcta', 'pregunta', 'imagen']
     list_editable = ['es_respuesta_correcta']
     # filtering by grandparent
     # TODO: Considering if in filtering we should add 'question'

@@ -53,29 +53,39 @@ class Material(models.Model):
 
 
 class Pregunta(models.Model):
-    texto = models.TextField()
+    # Some questions are just imgs
+    texto = models.TextField(null=True, unique=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
-    # TODO: fix this.
-    imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', blank=True)
+    # TODO: change this to TextField
+    imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.texto
+        if self.texto:
+            return self.texto
+        else:
+            return 'Sin texto'
 
     class Meta:
         managed = settings.MANAGED
 
 
 class Respuesta(models.Model):
-    texto = models.CharField(max_length=600)
+    texto = models.CharField(max_length=600, null=True, unique=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE, related_name='answers')
     es_respuesta_correcta = models.BooleanField()
     activo = models.BooleanField(default=True)
+    # TODO: consider adding 'literal field'
+    literal = models.CharField(max_length=2)
+    imagen = models.ImageField(upload_to='photos/answer_images/%Y/%m/%d/', null=True)
 
     def __str__(self):
-        return self.texto
+        if self.texto:
+            return self.texto
+        else:
+            return 'Sin texto'
 
     class Meta:
         managed = settings.MANAGED
