@@ -7,7 +7,16 @@ python manage.py makemigrations api
 python manage.py migrate
 
 echo "Checking if data folder exists"
-python downloader.py
+DIR="/app/data/"
+if [ -d "$DIR" ]; then
+  ### Take action if $DIR exists ###
+  echo "${DIR} exists"
+else
+  ###  Control will jump here if $DIR does NOT exists ###
+  echo "Error: ${DIR} not found. Downloading"
+  wget https://victor95-files.s3.amazonaws.com/data.zip
+  unzip data.zip
+fi
 
 echo "running server"
 
