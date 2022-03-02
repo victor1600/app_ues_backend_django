@@ -6,6 +6,9 @@ python manage.py makemigrations user
 python manage.py makemigrations api
 python manage.py migrate
 
+echo "Checking if data folder exists"
+python downloader.py
+
 echo "running server"
 
 echo $DJANGO_SETTINGS_MODULE
