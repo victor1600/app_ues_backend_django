@@ -55,9 +55,10 @@ class Material(models.Model):
 class Pregunta(models.Model):
     texto = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
-    imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True)
+    imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True, blank=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
+    numero_pregunta = models.IntegerField()
 
     def __str__(self):
         if self.texto:
@@ -67,18 +68,18 @@ class Pregunta(models.Model):
 
     class Meta:
         managed = settings.MANAGED
-        # unique_together = ('texto', 'tema', 'imagen')
+        unique_together = ('texto', 'tema', 'numero_pregunta')
 
 
 class Respuesta(models.Model):
-    texto = models.CharField(max_length=600, null=True, unique=True)
+    texto = models.CharField(max_length=600, null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE, related_name='answers')
     es_respuesta_correcta = models.BooleanField()
     activo = models.BooleanField(default=True)
     # TODO: consider adding 'literal field'
     literal = models.CharField(max_length=2)
-    imagen = models.ImageField(upload_to='photos/answer_images/%Y/%m/%d/', null=True)
+    imagen = models.ImageField(upload_to='photos/answer_images/%Y/%m/%d/', null=True, blank=True)
 
     def __str__(self):
         if self.texto:
@@ -88,6 +89,7 @@ class Respuesta(models.Model):
 
     class Meta:
         managed = settings.MANAGED
+        unique_together = ('pregunta', 'literal')
 
 
 class Aspirante(models.Model):
