@@ -10,13 +10,17 @@ echo "Checking if data folder exists"
 DIR="/app/data/"
 if [ -d "$DIR" ]; then
   ### Take action if $DIR exists ###
-  echo "${DIR} exists"
+  echo "data folder exists"
 else
   ###  Control will jump here if $DIR does NOT exists ###
-  echo "Error: ${DIR} not found. Downloading"
+  echo "Error: ${DIR} not found. Downloading..."
   wget https://victor95-files.s3.amazonaws.com/data.zip
   unzip data.zip
 fi
+
+# populating db
+echo "Checking for new data"
+python app_ues_backend_django/load_data.py
 
 echo "running server"
 

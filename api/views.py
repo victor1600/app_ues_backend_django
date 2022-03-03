@@ -45,7 +45,6 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuestionSerializer
 
 
-
 class AnswerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Respuesta.objects.all()
     serializer_class = AnswerSerializer
