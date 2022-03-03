@@ -29,7 +29,8 @@ class QuestionSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         for field in ['texto', 'imagen']:
             try:
-                if rep[field] is None or 'autogenerado' in rep[field]:  # checks if value is 'None', this is different from "emptiness"
+                print('autogenerado' in rep[field])
+                if rep[field] is None or 'autogenerado' in rep[field]:
                     rep.pop(field)
             except KeyError:
                 pass
@@ -59,6 +60,16 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pregunta
         fields = ('id', 'texto', 'imagen', 'tema',  'answers')
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in ['texto', 'imagen']:
+            try:
+                if rep[field] is None or 'autogenerado' in rep[field]:  # checks if value is 'None', this is different from "emptiness"
+                    rep.pop(field)
+            except KeyError:
+                pass
+        return rep
 
 
 class ExamResultSerializer(serializers.Serializer):

@@ -52,7 +52,7 @@ for d in get_files(courses_path):
                 if 'texto' not in q.keys():
                     # TODO: don't send this to client
                     # TODO: fix this, this might create duplicates as i could change.
-                    q['texto'] = f'{topic}_texto_no_disponible_{i+1}'
+                    q['texto'] = f'autogenerado_{topic}_{i+1}'
 
                 if 'imagen' in q.keys():
                     q['imagen'] = b64_to_img(q.get('imagen'))
