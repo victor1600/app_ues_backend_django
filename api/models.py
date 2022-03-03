@@ -53,10 +53,8 @@ class Material(models.Model):
 
 
 class Pregunta(models.Model):
-    # Some questions are just imgs
     texto = models.TextField(null=True, unique=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
-    # TODO: change this to TextField
     imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
