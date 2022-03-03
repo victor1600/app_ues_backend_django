@@ -58,11 +58,12 @@ for d in get_files(courses_path):
                     q['imagen'] = b64_to_img(q.get('imagen'))
 
                 answers = q.pop('answers')
+
                 try:
                     question, q_created = Pregunta.objects.get_or_create(**q, tema=topic)
                     if q_created:
                         logger.info(f'Created question for {topic}')
-                except django.db.utils.IntegrityError as e:
+                except django.db.utils.IntegrityError:
                     pass
 
                 for y, a in enumerate(answers):

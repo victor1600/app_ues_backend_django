@@ -53,7 +53,7 @@ class Material(models.Model):
 
 
 class Pregunta(models.Model):
-    texto = models.TextField(null=True, unique=True)
+    texto = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
@@ -67,6 +67,7 @@ class Pregunta(models.Model):
 
     class Meta:
         managed = settings.MANAGED
+        # unique_together = ('texto', 'tema', 'imagen')
 
 
 class Respuesta(models.Model):

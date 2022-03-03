@@ -17,8 +17,9 @@ def load_exam(json_exam, txt_exam):
         questions = []
         data = json.load(json_file)
         multiple_choice_questions = list(filter(lambda x: x.get("@type") == 'multichoice', data))
-        for q, right_answer in zip(multiple_choice_questions, right_answers):
-            question = {}
+        # for i, (name, age) in enumerate(zip(names, ages)):
+        for i, (q, right_answer) in enumerate(zip(multiple_choice_questions, right_answers)):
+            question = {'id': i+1}
             raw_qt = q.get('questiontext').get('text')
             result = ''.join(list(
                 filter(lambda y: len(y) > 3 and 'img' not in y and 'span' not in y and 'strong' not in y,
