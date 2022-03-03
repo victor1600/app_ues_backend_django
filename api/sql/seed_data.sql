@@ -1,5 +1,5 @@
 -- Course
-INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (1, 'Matemáticas', '', '2022-02-05 20:39:00.531232', 'photos/icons/2022/02/05/math.jpg', 1);
+INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (1, 'Matemáticas', '', '2022-02-05 20:39:00.531232', 'photos/icons/2022/02/05/math.jpg', 1);
 INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (2, 'Lenguaje', '', '2022-02-05 20:39:25.054127', 'photos/icons/2022/02/05/lenguaje.jpg', 1);
 INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (3, 'Biologia', '', '2022-02-05 20:39:39.337348', 'photos/icons/2022/02/05/biologia.png', 1);
 INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (4, 'Sociales', '', '2022-02-05 20:39:54.577533', 'photos/icons/2022/02/05/sociales.jpg', 1);
@@ -13,8 +13,8 @@ INSERT INTO api_tema  (id, texto, descripcion, created_at, activo, curso_id) VAL
 INSERT INTO api_tema  (id, texto, descripcion, created_at, activo, curso_id) VALUES (4, 'Análisis sintáctico', '', '2022-02-05 20:49:54.883961', 1, 2);
 INSERT INTO api_tema  (id, texto, descripcion, created_at, activo, curso_id) VALUES (5, 'Planteamiento de ecuaciones', '', '2022-02-05 21:20:20.877402', 1, 1);
 
--- -- Material
-INSERT INTO api_material (id, texto, descripcion, created_at, archivo, tema_id,activo) VALUES (1, 'Identidades Trigonométricas Fundamentales', '', '2022-02-05 20:51:25.420215', 'files/2022/02/05/trigonometria.pdf', 1, 1);
+-- -- -- Material
+-- INSERT INTO api_material (id, texto, descripcion, created_at, archivo, tema_id,activo) VALUES (1, 'Identidades Trigonométricas Fundamentales', '', '2022-02-05 20:51:25.420215', 'files/2022/02/05/trigonometria.pdf', 1, 1);
 
 --
 -- -- -- Question
