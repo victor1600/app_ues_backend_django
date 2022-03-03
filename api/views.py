@@ -78,7 +78,21 @@ class GradeView(APIView):
 
             grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
                         .count() / len(answer_ids) * 10
-            return Response({"grade": round(grade, 2)}, status=status.HTTP_200_OK)
+            # TODO: get incorrect answered questions with proper right answer
+            # Collect question with right answer
+            incorrect_answered_questions = []
+            for a_id in answer_ids:
+                answer = Respuesta.objects.get(pk=a_id)
+                if not answer.es_respuesta_correcta:
+                    question = answer.pregunta
+                    selected_wrong_answer = question.answers.filter(pk=a_id).first()
+                    actual_correct_answer = question.answers.filter(es_respuesta_correcta=True).first()
+                    question_serializer = QuestionSerializer(question)
+                    answers_serializer = AnswerSerializer([selected_wrong_answer, actual_correct_answer], many=True)
+                    incorrect_answered_questions.append([{"pregunta": question_serializer.data,
+                                                          "respuestas": answers_serializer.data}])
+
+            return Response({"grade": round(grade, 2), "wrongs": incorrect_answered_questions}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

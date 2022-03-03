@@ -29,7 +29,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         for field in ['texto', 'imagen']:
             try:
-                print('autogenerado' in rep[field])
+                #print('autogenerado' in rep[field])
                 if rep[field] is None or 'autogenerado' in rep[field]:
                     rep.pop(field)
             except KeyError:
