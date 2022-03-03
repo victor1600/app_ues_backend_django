@@ -14,6 +14,9 @@ general.log
 /static/
 data
 data.zip
+media/photos/answer_images
+media/photos/question_images
+media/files
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
