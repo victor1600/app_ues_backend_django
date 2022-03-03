@@ -7,7 +7,7 @@ def load_data_from_sql():
     sql_file = '../sql/seed_data.sql'
     sql_statements = open(os.path.realpath(f'api/sql/{sql_file}'), 'r').read()
     return sql_statements
-
+#
 
 def delete_data_with_sql():
     # TODO: do this properly
