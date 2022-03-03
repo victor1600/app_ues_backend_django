@@ -65,14 +65,15 @@ for d in get_files(courses_path):
                 except django.db.utils.IntegrityError as e:
                     pass
 
-                for y,a in enumerate(answers):
+                for y, a in enumerate(answers):
                     if 'imagen' in a.keys():
                         a['imagen'] = b64_to_img(a.get('imagen'))
 
                     # if 'texto' not in a.keys():
                     #     # TODO: don't send this to client
                     #     # TODO: fix this, this might create duplicates as i could change.
-                    a['texto'] = f'autogenerado_{question.id}_{a["literal"]}'
+                    if 'texto' not in a.keys():
+                        a['texto'] = f'autogenerado_{question.id}_{a["literal"]}'
                     try:
                         Respuesta.objects.get_or_create(**a, pregunta=question)
                     except django.db.utils.IntegrityError as e:
