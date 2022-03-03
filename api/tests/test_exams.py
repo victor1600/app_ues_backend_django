@@ -16,7 +16,7 @@ class TestExamQuestionFetching:
         """
         authenticate()
         for _ in range(random.randint(2, 20)):
-            question = baker.make(Pregunta, texto='a')
+            question = baker.make(Pregunta)
             rand = random.randint(2, 5)
             for i in range(rand):
 
