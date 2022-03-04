@@ -57,6 +57,8 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tema']
 
+    # TODO: CONSIDERING RETURNING EQUALLY SIZED CHUNKS OF EVERY COURSE.
+
     def get_queryset(self):
         if 'limit' in self.request.query_params.keys():
             try:
@@ -78,21 +80,29 @@ class GradeView(APIView):
 
             grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
                         .count() / len(answer_ids) * 10
-            # TODO: get incorrect answered questions with proper right answer
-            # Collect question with right answer
             incorrect_answered_questions = []
+            notas_parciales = {}
             for a_id in answer_ids:
                 answer = Respuesta.objects.get(pk=a_id)
+                question = answer.pregunta
+
+                if question.tema.curso.texto not in notas_parciales:
+                    notas_parciales[question.tema.curso.texto] = []
+
+                notas_parciales[question.tema.curso.texto].append(answer.es_respuesta_correcta)
+
+                selected_wrong_answer = question.answers.filter(pk=a_id).first()
+                actual_correct_answer = question.answers.filter(es_respuesta_correcta=True).first()
                 if not answer.es_respuesta_correcta:
-                    question = answer.pregunta
-                    selected_wrong_answer = question.answers.filter(pk=a_id).first()
-                    actual_correct_answer = question.answers.filter(es_respuesta_correcta=True).first()
                     question_serializer = QuestionSerializer(question)
                     answers_serializer = AnswerSerializer([selected_wrong_answer, actual_correct_answer], many=True)
                     incorrect_answered_questions.append([{"pregunta": question_serializer.data,
                                                           "respuestas": answers_serializer.data}])
+            for k, v in notas_parciales.items():
+                notas_parciales[k] = sum(v)/len(v)*10
 
-            return Response({"grade": round(grade, 2), "wrongs": incorrect_answered_questions}, status=status.HTTP_200_OK)
+            return Response({"grade": round(grade, 2),"partial_grades": notas_parciales ,"wrongs": incorrect_answered_questions},
+                            status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -28,7 +28,7 @@ INSERT INTO api_tema  (id, texto, descripcion, created_at, activo, curso_id) VAL
 -- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (4, 'Manuel José Arce', '2022-02-05 21:36:02.025145', 1, 1, 2);
 -- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (5, 'Alfredo Cristiani', '2022-02-05 21:36:20.241509', 0, 1, 2);
 -- INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, pregunta_id) VALUES (6, 'Gerardo Barrios', '2022-02-05 21:36:43.208453', 0, 1, 2);
---
+
 
 -- User
 INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (1, 'pbkdf2_sha256$260000$QO6W0kSBNV54iF4lmOjPqr$17ElHqt1eg/MG4+rpJ7kipZlcBhl18aPwZLWdCWCExs=', '2022-02-12 18:08:38.807751', 1, 'admin', '', '', 1, 1, '2022-02-12 18:08:33.112459', 'admin@gmail.com');

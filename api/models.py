@@ -58,7 +58,9 @@ class Pregunta(models.Model):
     imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True, blank=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
-    numero_pregunta = models.IntegerField()
+    # TODO: INTRODUCE difficultuy level int field
+    numero_pregunta = models.IntegerField(null=True,blank=True)
+    dificultad = models.PositiveSmallIntegerField(default=0, null=True,blank=True)
 
     def __str__(self):
         if self.texto:
@@ -78,7 +80,7 @@ class Respuesta(models.Model):
     es_respuesta_correcta = models.BooleanField()
     activo = models.BooleanField(default=True)
     # TODO: consider adding 'literal field'
-    literal = models.CharField(max_length=2)
+    literal = models.CharField(max_length=2, null=True,blank=True)
     imagen = models.ImageField(upload_to='photos/answer_images/%Y/%m/%d/', null=True, blank=True)
 
     def __str__(self):
