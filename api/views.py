@@ -81,7 +81,7 @@ class GradeView(APIView):
 
             grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
                         .count() / len(answer_ids) * 10
-            incorrect_answered_questions = []
+            # incorrect_answered_questions = []
             notas_parciales = {}
             for a_id in answer_ids:
                 answer = Respuesta.objects.get(pk=a_id)
@@ -92,20 +92,20 @@ class GradeView(APIView):
 
                 notas_parciales[question.tema.curso.texto].append(answer.es_respuesta_correcta)
 
-                selected_wrong_answer = question.answers.filter(pk=a_id).first()
-                actual_correct_answer = question.answers.filter(es_respuesta_correcta=True).first()
-                if not answer.es_respuesta_correcta:
-                    question_serializer = QuestionSerializer(question)
-                    answers_serializer = AnswerSerializer([selected_wrong_answer, actual_correct_answer], many=True)
-                    incorrect_answered_questions.append({"pregunta": question_serializer.data,
-                                                          "respuestas": answers_serializer.data})
+                # selected_wrong_answer = question.answers.filter(pk=a_id).first()
+                # actual_correct_answer = question.answers.filter(es_respuesta_correcta=True).first()
+                # if not answer.es_respuesta_correcta:
+                #     question_serializer = QuestionSerializer(question)
+                #     answers_serializer = AnswerSerializer([selected_wrong_answer, actual_correct_answer], many=True)
+                #     incorrect_answered_questions.append({"pregunta": question_serializer.data,
+                #                                           "respuestas": answers_serializer.data})
 
             for k, v in notas_parciales.items():
                 notas_parciales[k] = sum(v) / len(v) * 10
 
             grade = round(grade, 2)
             response = {"grade": grade, "partial_grades": notas_parciales,
-                        "wrongs": incorrect_answered_questions}
+                        }
             # TODO: implement signal history saving
             exam_finished.send_robust(sender=None, data=response, user=request.user)
 
