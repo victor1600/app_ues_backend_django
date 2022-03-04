@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from api.signals import *
+from django.contrib.auth import get_user_model
+from django.db.models import Q, Sum
 
 import logging
 
@@ -137,3 +139,8 @@ class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+
+
+# TODO: implemente leader board, use this query
+User = get_user_model()
+#queryset = User.objects.annotate(score=Sum('aspirante__examen__nota')).filter(~Q(score=None)).order_by('-score')

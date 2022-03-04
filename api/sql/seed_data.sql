@@ -31,8 +31,12 @@ INSERT INTO api_tema  (id, texto, descripcion, created_at, activo, curso_id) VAL
 
 
 -- User
-INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (1, 'pbkdf2_sha256$260000$QO6W0kSBNV54iF4lmOjPqr$17ElHqt1eg/MG4+rpJ7kipZlcBhl18aPwZLWdCWCExs=', '2022-02-12 18:08:38.807751', 1, 'admin', '', '', 1, 1, '2022-02-12 18:08:33.112459', 'admin@gmail.com');
-INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (2, 'pbkdf2_sha256$260000$ypJAj3jLA4G4phqV0O71Ib$c1fR2IlHQZQmbbTrm4JIfvevICUvZqoVusAtsD/K7V0=', null, 0, 'estudiante', 'victor', 'gonzalez', 0, 1, '2022-03-04 03:50:12.215049', '');
+INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (1, 'pbkdf2_sha256$260000$QO6W0kSBNV54iF4lmOjPqr$17ElHqt1eg/MG4+rpJ7kipZlcBhl18aPwZLWdCWCExs=', '2022-03-04 20:43:46.983283', 1, 'admin', '', '', 1, 1, '2022-02-12 18:08:33.112459', 'admin@gmail.com');
+INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (2, 'pbkdf2_sha256$260000$ypJAj3jLA4G4phqV0O71Ib$c1fR2IlHQZQmbbTrm4JIfvevICUvZqoVusAtsD/K7V0=', null, 0, 'estudiante', 'victor', 'gonzalez', 0, 1, '2022-03-04 03:50:12.215049', 'victor@gmail.com');
+INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (3, 'pbkdf2_sha256$260000$hNb2pn09Pue4rBSzCj3Ytc$P0rV3JjbhxXYrtxAqv1C744/KTRTj31GlorrCyPfeNU=', null, 0, 'estudiante2', 'Nicole', 'Guerra', 0, 1, '2022-03-04 20:44:25.021444', 'nicole@gmail.com');
+INSERT INTO user_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) VALUES (4, 'pbkdf2_sha256$260000$xaAEK2iqmAToEtmOMid1Wn$ZvvDfZKhDhAUo84qiJ6QqGAqyFhKVTmLPbC7dgvUUII=', null, 0, 'neko', 'samuel', 'paiz', 0, 1, '2022-03-04 20:44:53.918011', 'neko@gmail.com');
 
 -- Aspirante
 INSERT INTO api_aspirante (id, fecha_de_nacimiento, user_id) VALUES (1, null, 2);
+INSERT INTO api_aspirante (id, fecha_de_nacimiento, user_id) VALUES (2, null, 3);
+INSERT INTO api_aspirante (id, fecha_de_nacimiento, user_id) VALUES (3, null, 4);
