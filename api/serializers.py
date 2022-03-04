@@ -5,25 +5,29 @@ from .models import *
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Curso
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('created_at', 'activo')
 
 
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tema
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('created_at', 'activo')
 
 
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('created_at', 'activo')
 
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pregunta
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('created_at', 'activo', 'numero_pregunta', 'dificultad')
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -41,7 +45,8 @@ class AnswerSerializer(serializers.ModelSerializer):
     # TODO: validate there is only one question with is_right_answer set to True.
     class Meta:
         model = Respuesta
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('created_at', 'activo', 'literal',)
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
