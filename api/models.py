@@ -58,7 +58,6 @@ class Pregunta(models.Model):
     imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True, blank=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
-    # TODO: INTRODUCE difficultuy level int field
     numero_pregunta = models.IntegerField(null=True,blank=True)
     dificultad = models.PositiveSmallIntegerField(default=0, null=True,blank=True)
 

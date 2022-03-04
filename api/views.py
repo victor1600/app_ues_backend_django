@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from api.signals import *
 
 import logging
 
@@ -58,7 +59,7 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['tema']
 
     # TODO: CONSIDERING RETURNING EQUALLY SIZED CHUNKS OF EVERY COURSE.
-
+    # TODO: configure limitations.
     def get_queryset(self):
         if 'limit' in self.request.query_params.keys():
             try:
@@ -98,11 +99,17 @@ class GradeView(APIView):
                     answers_serializer = AnswerSerializer([selected_wrong_answer, actual_correct_answer], many=True)
                     incorrect_answered_questions.append([{"pregunta": question_serializer.data,
                                                           "respuestas": answers_serializer.data}])
-            for k, v in notas_parciales.items():
-                notas_parciales[k] = sum(v)/len(v)*10
 
-            return Response({"grade": round(grade, 2), "partial_grades": notas_parciales, "wrongs": incorrect_answered_questions},
-                            status=status.HTTP_200_OK)
+            for k, v in notas_parciales.items():
+                notas_parciales[k] = sum(v) / len(v) * 10
+
+            grade = round(grade, 2)
+            response = {"grade": grade, "partial_grades": notas_parciales,
+                        "wrongs": incorrect_answered_questions}
+            # TODO: implement signal history saving
+            exam_finished.send_robust(sender=None, data=response, user=request.user)
+
+            return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
