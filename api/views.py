@@ -97,8 +97,8 @@ class GradeView(APIView):
                 if not answer.es_respuesta_correcta:
                     question_serializer = QuestionSerializer(question)
                     answers_serializer = AnswerSerializer([selected_wrong_answer, actual_correct_answer], many=True)
-                    incorrect_answered_questions.append([{"pregunta": question_serializer.data,
-                                                          "respuestas": answers_serializer.data}])
+                    incorrect_answered_questions.append({"pregunta": question_serializer.data,
+                                                          "respuestas": answers_serializer.data})
 
             for k, v in notas_parciales.items():
                 notas_parciales[k] = sum(v) / len(v) * 10
