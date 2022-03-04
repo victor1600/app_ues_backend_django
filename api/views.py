@@ -101,7 +101,7 @@ class GradeView(APIView):
             for k, v in notas_parciales.items():
                 notas_parciales[k] = sum(v)/len(v)*10
 
-            return Response({"grade": round(grade, 2),"partial_grades": notas_parciales ,"wrongs": incorrect_answered_questions},
+            return Response({"grade": round(grade, 2), "partial_grades": notas_parciales, "wrongs": incorrect_answered_questions},
                             status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
