@@ -102,4 +102,15 @@ class Aspirante(models.Model):
 
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
-    # TODO: define more fields
+
+
+class HistoricoExamen(models.Model):
+    nota = models.FloatField(max_length=4)
+    aspirante = models.ForeignKey(Aspirante, on_delete=models.CASCADE)
+
+
+class HistoricoExamenCurso(models.Model):
+    examen = models.ForeignKey(HistoricoExamen, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    nota = models.FloatField(max_length=4)
+
