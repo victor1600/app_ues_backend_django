@@ -107,10 +107,11 @@ class Aspirante(models.Model):
 class HistoricoExamen(models.Model):
     nota = models.FloatField(max_length=4)
     aspirante = models.ForeignKey(Aspirante, on_delete=models.CASCADE, related_name='examen')
+    created_at = models.DateTimeField(auto_now=True, blank=True)
 
 
 class HistoricoExamenCurso(models.Model):
-    examen = models.ForeignKey(HistoricoExamen, on_delete=models.CASCADE)
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    examen = models.ForeignKey(HistoricoExamen, on_delete=models.CASCADE, related_name='examen')
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='examen_curso')
     nota = models.FloatField(max_length=4)
 

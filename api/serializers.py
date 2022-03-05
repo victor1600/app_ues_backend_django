@@ -1,8 +1,12 @@
+from django.db.models import Q,Avg
+
 from rest_framework import serializers
 from .models import *
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    nota_parcial = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Curso
         # fields = '__all__'
@@ -33,7 +37,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         for field in ['texto', 'imagen']:
             try:
-                #print('autogenerado' in rep[field])
+                # print('autogenerado' in rep[field])
                 if rep[field] is None or 'autogenerado' in rep[field]:
                     rep.pop(field)
             except KeyError:
@@ -52,7 +56,7 @@ class AnswerSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         for field in ['texto', 'imagen']:
             try:
-                if rep[field] is None or 'autogenerado' in rep[field]:  # checks if value is 'None', this is different from "emptiness"
+                if rep[field] is None or 'autogenerado' in rep[field]:
                     rep.pop(field)
             except KeyError:
                 pass
@@ -64,13 +68,13 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pregunta
-        fields = ('id', 'texto', 'imagen', 'tema',  'answers')
+        fields = ('id', 'texto', 'imagen', 'tema', 'answers')
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         for field in ['texto', 'imagen']:
             try:
-                if rep[field] is None or 'autogenerado' in rep[field]:  # checks if value is 'None', this is different from "emptiness"
+                if rep[field] is None or 'autogenerado' in rep[field]:
                     rep.pop(field)
             except KeyError:
                 pass
@@ -78,14 +82,37 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
 
 class ExamResultSerializer(serializers.Serializer):
-    # TODO: analyze if we really need the questions.
-    # question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
     answers = serializers.PrimaryKeyRelatedField(queryset=Respuesta.objects.all(), many=True)
+
+
+class PartialGradeSerializer(serializers.Serializer):
+    curso = serializers.CharField()
+    nota = serializers.FloatField()
 
 
 class AspiranteSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    score = serializers.FloatField(read_only=True)
+    average_grades = serializers.SerializerMethodField()
 
     class Meta:
         model = Aspirante
-        fields = ['id', 'user_id', 'fecha_de_nacimiento']
+        fields = ['id', 'first_name', 'last_name', 'score', 'average_grades', 'user_id']
+
+    def get_average_grades(self, obj):
+        result = Curso.objects\
+            .annotate(nota_parcial=Avg('examen_curso__nota')).filter(~Q(nota_parcial=None))\
+            .filter(examen_curso__examen__aspirante__id=obj.id)
+
+        serializer = CourseSerializer(result, many=True)
+        grades = [{'course': c['texto'], 'grade': round(c['nota_parcial'],2)} for c in serializer.data]
+        return grades
+
+    # TODO: Implement consecutive days practiced
+
+    # Cuestionarios realizados
+
+    # Puntos de experiencia so far
+

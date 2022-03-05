@@ -123,12 +123,9 @@ class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
     # if detail = True, the route would be api/aspirantes/1/me
     @action(detail=False, methods=['GET', 'PUT'])
     def me(self, request):
-        print(request.user.is_superuser)
         if request.user.is_anonymous:
             return Response("Usuario no tiene perfil de aspirante asociado")
         logger.info(request.user)
-        # aspirante = Aspirante.objects.get(user_id=request.user.id)
-        print(Aspirante.objects.first())
         aspirante = get_object_or_404(Aspirante, user_id=request.user.id)
         if request.method == 'GET':
             logger.info(f'{request.user} ')
@@ -141,6 +138,11 @@ class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
             return Response(serializer.data)
 
 
-# TODO: implemente leader board, use this query
 User = get_user_model()
-#queryset = User.objects.annotate(score=Sum('aspirante__examen__nota')).filter(~Q(score=None)).order_by('-score')
+
+
+class LeaderBoardApiView(viewsets.ReadOnlyModelViewSet):
+    queryset = Aspirante.objects.annotate(score=Sum('examen__nota')) \
+        .filter(~Q(score=None)).order_by('-score')
+    serializer_class = AspiranteSerializer
+
