@@ -96,6 +96,9 @@ class Respuesta(models.Model):
 class Aspirante(models.Model):
     fecha_de_nacimiento = models.DateField(null=True, blank=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='photos/profile_images/%Y/%m/%d/', null=True, blank=True)
+    # TODO: implement profile picture
+    # DISPLAY DEFAULT IMAGE IN FRONTEND IF NO IMAGE SET BY USER FOUND.
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'

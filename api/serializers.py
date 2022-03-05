@@ -1,4 +1,4 @@
-from django.db.models import Q,Avg
+from django.db.models import Q, Avg
 
 from rest_framework import serializers
 from .models import *
@@ -92,27 +92,25 @@ class PartialGradeSerializer(serializers.Serializer):
 
 class AspiranteSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
-    first_name = serializers.CharField(source='user.first_name')
-    last_name = serializers.CharField(source='user.last_name')
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
     score = serializers.FloatField(read_only=True)
     average_grades = serializers.SerializerMethodField()
+    n_exams_completed = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Aspirante
-        fields = ['id', 'first_name', 'last_name', 'score', 'average_grades', 'user_id']
+        fields = ['id','imagen','first_name', 'last_name', 'score', 'average_grades',
+                  'n_exams_completed', 'user_id']
 
     def get_average_grades(self, obj):
-        result = Curso.objects\
-            .annotate(nota_parcial=Avg('examen_curso__nota')).filter(~Q(nota_parcial=None))\
+        result = Curso.objects \
+            .annotate(nota_parcial=Avg('examen_curso__nota')).filter(~Q(nota_parcial=None)) \
             .filter(examen_curso__examen__aspirante__id=obj.id)
 
         serializer = CourseSerializer(result, many=True)
-        grades = [{'course': c['texto'], 'grade': round(c['nota_parcial'],2)} for c in serializer.data]
+        grades = [{'course': c['texto'], 'grade': round(c['nota_parcial'], 2)} for c in serializer.data]
         return grades
 
     # TODO: Implement consecutive days practiced
-
-    # Cuestionarios realizados
-
-    # Puntos de experiencia so far
 

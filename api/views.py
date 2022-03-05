@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
@@ -8,7 +7,8 @@ from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from api.signals import *
 from django.contrib.auth import get_user_model
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Count
+from django.db.models.functions import Coalesce
 
 import logging
 
@@ -115,34 +115,53 @@ class GradeView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
-    queryset = Aspirante.objects.all()
-    serializer_class = AspiranteSerializer
+# class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+#     queryset = Aspirante.objects.all()
+#     serializer_class = AspiranteSerializer
 
     # The action will be under api/aspirantes/me
     # if detail = True, the route would be api/aspirantes/1/me
-    @action(detail=False, methods=['GET', 'PUT'])
-    def me(self, request):
-        if request.user.is_anonymous:
-            return Response("Usuario no tiene perfil de aspirante asociado")
-        logger.info(request.user)
-        aspirante = get_object_or_404(Aspirante, user_id=request.user.id)
-        if request.method == 'GET':
-            logger.info(f'{request.user} ')
-            serializer = AspiranteSerializer(aspirante)
-            return Response(serializer.data)
-        elif request.method == 'PUT':
-            serializer = AspiranteSerializer(aspirante, data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+    # @action(detail=False, methods=['GET', 'PUT'])
+    # def me(self, request):
+    #     if request.user.is_anonymous:
+    #         return Response("Usuario no tiene perfil de aspirante asociado")
+    #     logger.info(request.user)
+    #     aspirante = get_object_or_404(Aspirante, user_id=request.user.id)
+    #     if request.method == 'GET':
+    #         logger.info(f'{request.user} ')
+    #         serializer = AspiranteSerializer(aspirante)
+    #         return Response(serializer.data)
+    #     elif request.method == 'PUT':
+    #         serializer = AspiranteSerializer(aspirante, data=request.data)
+    #         serializer.is_valid(raise_exception=True)
+    #         serializer.save()
+    #         return Response(serializer.data)
 
 
 User = get_user_model()
 
 
-class LeaderBoardApiView(viewsets.ReadOnlyModelViewSet):
-    queryset = Aspirante.objects.annotate(score=Sum('examen__nota')) \
-        .filter(~Q(score=None)).order_by('-score')
+class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Aspirante.objects.annotate(score=Coalesce(Sum('examen__nota'), 0.0))\
+        .annotate(n_exams_completed=Coalesce(Count('examen'),0)) \
+        .order_by('-score')
     serializer_class = AspiranteSerializer
+
+    @action(detail=False, methods=['GET', 'PATCH'])
+    def me(self, request):
+        if request.user.is_anonymous:
+            return Response("Usuario no tiene perfil de aspirante asociado")
+        logger.info(request.user)
+        aspirante = get_object_or_404(self.queryset, user_id=request.user.id)
+        if request.method == 'GET':
+            logger.info(f'{request.user} ')
+            serializer = AspiranteSerializer(aspirante, context={'request': request})
+            return Response(serializer.data)
+        elif request.method == 'PATCH':
+            print(aspirante)
+            print(request.data)
+            serializer = AspiranteSerializer(aspirante, data=request.data, partial=True, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
 
