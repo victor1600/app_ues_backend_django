@@ -1,5 +1,4 @@
 Django~=3.2
-django-admin-interface
 django-debug-toolbar
 django-filter
 djangorestframework

@@ -38,7 +38,7 @@ services:
       - static_volume:/app/static
       - media_volume:/app/media
     ports:
-      # this is optimized to run in prod
+      # this is optimized to run in prod1
       - 1337:80
     depends_on:
       - web

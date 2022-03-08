@@ -30,8 +30,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 CORS_ORIGIN_ALLOW_ALL = True
 
 INSTALLED_APPS = [
-    'admin_interface',
-    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -136,7 +134,7 @@ MANAGED = truthiness(get_env('MANAGED', 'true'))
 
 # RIGHT CONFIGURATION FOR STATIC
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
