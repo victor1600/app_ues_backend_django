@@ -39,7 +39,7 @@ services:
       - media_volume:/app/media
     ports:
       # this is optimized to run in prod
-      - 8080:80
+      - 1337:80
     depends_on:
       - web
 
