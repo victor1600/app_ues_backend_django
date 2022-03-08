@@ -11,7 +11,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 general.log
-#/static/
+/static/
 data
 data.zip
 media/photos/answer_images
