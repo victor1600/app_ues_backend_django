@@ -37,22 +37,23 @@ for d in get_files(courses_path):
         pdfs_path = f'{topics_path}/{t}/pdf'
         for pdf in get_files(pdfs_path):
             try:
-                m, m_created = Material.objects.get_or_create(texto=pdf, archivo=File(open(f'{os.path.join(pdfs_path, pdf)}', 'rb')), tema=topic)
+                m, m_created = Material.objects.get_or_create(texto=pdf, archivo=File(
+                    open(f'{os.path.join(pdfs_path, pdf)}', 'rb')), tema=topic)
                 logger.info(f'Uploaded material to {m.archivo} ')
             except django.db.utils.IntegrityError as e:
                 # material already exists
                 pass
         exams_path = f'{topics_path}/{t}/exam'
-        if 'Algebra' == t:
+        if 'exam' in get_files(f'{topics_path}/{t}/'):
             exam_files = get_files(exams_path)
-            json_exam = list(filter(lambda x: '.json' in x,exam_files))[0]
-            txt_exam = list(filter(lambda x: '.txt' in x,exam_files))[0]
-            exam = load_exam(f'{exams_path}/{json_exam}', f'{exams_path}/{txt_exam}')
-            for i,q in enumerate(exam):
+            xml_exam = list(filter(lambda x: '.xml' in x, exam_files))[0]
+            txt_exam = list(filter(lambda x: '.txt' in x, exam_files))[0]
+            exam = load_exam(f'{exams_path}/{xml_exam}', f'{exams_path}/{txt_exam}')
+            for i, q in enumerate(exam):
                 if 'texto' not in q.keys():
                     # TODO: don't send this to client
                     # TODO: fix this, this might create duplicates as i could change.
-                    q['texto'] = f'autogenerado_{topic}_{i+1}'
+                    q['texto'] = f'autogenerado_{topic}_{i + 1}'
 
                 if 'imagen' in q.keys():
                     q['imagen'] = b64_to_img(q.get('imagen'))
@@ -79,8 +80,3 @@ for d in get_files(courses_path):
                         Respuesta.objects.get_or_create(**a, pregunta=question)
                     except django.db.utils.IntegrityError as e:
                         pass
-
-
-
-
-

@@ -1,8 +1,9 @@
 import re
 import json
+import xmltodict
 
 
-def load_exam(json_exam, txt_exam):
+def load_exam(xml_exam, txt_exam):
     # read txt file
     right_answers = []
     with open(txt_exam) as f:
@@ -13,9 +14,11 @@ def load_exam(json_exam, txt_exam):
                 right_answers.append(correct)
 
     # read json
-    with open(json_exam) as json_file:
+    with open(xml_exam, "r") as xml_file:
         questions = []
-        data = json.load(json_file)
+        data_dict = xmltodict.parse(xml_file.read())
+        xml_file.close()
+        data = data_dict.get('quiz').get('question')
         multiple_choice_questions = list(filter(lambda x: x.get("@type") == 'multichoice', data))
         # for i, (name, age) in enumerate(zip(names, ages)):
         for i, (q, right_answer) in enumerate(zip(multiple_choice_questions, right_answers)):

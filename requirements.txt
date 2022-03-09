@@ -18,3 +18,4 @@ pytest
 pytest-django
 requests
 whitenoise==5.3.0
+xmltodict
