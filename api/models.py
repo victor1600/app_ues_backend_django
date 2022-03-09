@@ -38,7 +38,7 @@ class Tema(models.Model):
 
 
 class Material(models.Model):
-    texto = models.CharField(max_length=2000, unique=True)
+    texto = models.TextField(unique=True)
     descripcion = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     archivo = models.FileField(upload_to='files/%Y/%m/%d/', max_length=2000)

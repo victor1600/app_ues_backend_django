@@ -28,5 +28,13 @@ class WebsiteUser(HttpUser):
         topic_id = randint(1, 5)
         self.client.get(f'/api/exam-questions/?tema={topic_id}', name='/api/exam-questions/')
 
+    @task(3)
+    def calculate_grade(self):
+        logger.info('[LOAD TEST] Grading exam')
+        answers = [1,8,15]
+        self.client.post(f'/api/calculate-grade/',
+                         name='/api/calculate-grade/',
+                         json={"answers": answers})
+
 
 

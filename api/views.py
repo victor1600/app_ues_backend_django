@@ -83,7 +83,6 @@ class GradeView(APIView):
 
             grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
                         .count() / len(answer_ids) * 10
-            # incorrect_answered_questions = []
             notas_parciales = {}
             for a_id in answer_ids:
                 answer = Respuesta.objects.get(pk=a_id)
@@ -93,14 +92,6 @@ class GradeView(APIView):
                     notas_parciales[question.tema.curso.texto] = []
 
                 notas_parciales[question.tema.curso.texto].append(answer.es_respuesta_correcta)
-
-                # selected_wrong_answer = question.answers.filter(pk=a_id).first()
-                # actual_correct_answer = question.answers.filter(es_respuesta_correcta=True).first()
-                # if not answer.es_respuesta_correcta:
-                #     question_serializer = QuestionSerializer(question)
-                #     answers_serializer = AnswerSerializer([selected_wrong_answer, actual_correct_answer], many=True)
-                #     incorrect_answered_questions.append({"pregunta": question_serializer.data,
-                #                                           "respuestas": answers_serializer.data})
 
             for k, v in notas_parciales.items():
                 notas_parciales[k] = sum(v) / len(v) * 10
@@ -113,29 +104,6 @@ class GradeView(APIView):
 
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class AspiranteViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
-#     queryset = Aspirante.objects.all()
-#     serializer_class = AspiranteSerializer
-
-    # The action will be under api/aspirantes/me
-    # if detail = True, the route would be api/aspirantes/1/me
-    # @action(detail=False, methods=['GET', 'PUT'])
-    # def me(self, request):
-    #     if request.user.is_anonymous:
-    #         return Response("Usuario no tiene perfil de aspirante asociado")
-    #     logger.info(request.user)
-    #     aspirante = get_object_or_404(Aspirante, user_id=request.user.id)
-    #     if request.method == 'GET':
-    #         logger.info(f'{request.user} ')
-    #         serializer = AspiranteSerializer(aspirante)
-    #         return Response(serializer.data)
-    #     elif request.method == 'PUT':
-    #         serializer = AspiranteSerializer(aspirante, data=request.data)
-    #         serializer.is_valid(raise_exception=True)
-    #         serializer.save()
-    #         return Response(serializer.data)
 
 
 User = get_user_model()
