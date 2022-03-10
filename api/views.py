@@ -55,7 +55,7 @@ class AnswerViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     # Get just active questions in the exam
-    queryset = Pregunta.objects.filter(activo=True)
+    queryset = Pregunta.objects.prefetch_related('answers').filter(activo=True)
     serializer_class = ExamQuestionsAndAnswersSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tema']

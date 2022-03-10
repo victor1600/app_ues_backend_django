@@ -24,10 +24,16 @@ def load_exam(xml_exam, txt_exam):
         for i, (q, right_answer) in enumerate(zip(multiple_choice_questions, right_answers)):
             question = {"numero_pregunta": i+1}
             raw_qt = q.get('questiontext').get('text')
-            result = ''.join(list(
-                filter(lambda y: len(y) > 3 and 'img' not in y and 'span' not in y and 'strong' not in y,
-                       re.split(r'[<>]', raw_qt))))
-            question_text = re.sub(' +', ' ', result)
+            try:
+                result = ''.join(list(
+                    filter(lambda y: len(y) > 3 and 'img' not in y and 'span' not in y and 'strong' not in y,
+                           re.split(r'[<>]', raw_qt))))
+                question_text = re.sub(' +', ' ', result)
+                question_text = question_text.replace("br /", "")
+            except:
+                print('Error detected, skipping')
+                print(xml_exam)
+                continue
 
             if 'file' in q.get('questiontext'):
                 if isinstance(q.get('questiontext').get('file'), list):
@@ -47,6 +53,7 @@ def load_exam(xml_exam, txt_exam):
                     filter(
                         lambda y: 'img' not in y and 'span' not in y and 'strong' not in y and y != 'p' and y != '/p',
                         re.split(r'[<>]', a['text']))))
+                text = text.replace("br /", "")
                 if text:
                     answer['texto'] = text
 

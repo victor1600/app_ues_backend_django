@@ -45,9 +45,12 @@ for d in get_files(courses_path):
                 pass
         exams_path = f'{topics_path}/{t}/exam'
         if 'exam' in get_files(f'{topics_path}/{t}/'):
-            exam_files = get_files(exams_path)
-            xml_exam = list(filter(lambda x: '.xml' in x, exam_files))[0]
-            txt_exam = list(filter(lambda x: '.txt' in x, exam_files))[0]
+            try:
+                exam_files = get_files(exams_path)
+                xml_exam = list(filter(lambda x: '.xml' in x, exam_files))[0]
+                txt_exam = list(filter(lambda x: '.txt' in x, exam_files))[0]
+            except:
+                print(exam_files)
             exam = load_exam(f'{exams_path}/{xml_exam}', f'{exams_path}/{txt_exam}')
             for i, q in enumerate(exam):
                 if 'texto' not in q.keys():
