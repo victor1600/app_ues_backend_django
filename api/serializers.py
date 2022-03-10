@@ -97,11 +97,12 @@ class AspiranteSerializer(serializers.ModelSerializer):
     score = serializers.FloatField(read_only=True)
     average_grades = serializers.SerializerMethodField()
     n_exams_completed = serializers.IntegerField(read_only=True)
+    rank = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Aspirante
         fields = ['id','imagen','first_name', 'last_name', 'score', 'average_grades',
-                  'n_exams_completed', 'user_id']
+                  'n_exams_completed', 'user_id', 'rank']
 
     def get_average_grades(self, obj):
         result = Curso.objects \

@@ -7,8 +7,10 @@ from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from api.signals import *
 from django.contrib.auth import get_user_model
-from django.db.models import Q, Sum, Count
-from django.db.models.functions import Coalesce
+from django.db.models import Q, Sum, Count, F, Value
+from django.db.models.functions import Coalesce, RowNumber, Rank, DenseRank
+from rest_framework.pagination import PageNumberPagination
+from django.db.models.expressions import RawSQL, Window
 
 import logging
 
@@ -110,10 +112,23 @@ User = get_user_model()
 
 
 class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
+    # TODO: annotate with position
     queryset = Aspirante.objects.select_related('user').annotate(score=Coalesce(Sum('examen__nota'), 0.0))\
         .annotate(n_exams_completed=Coalesce(Count('examen'), 0)) \
-        .order_by('-score')
+        .order_by('-score').annotate(rank=Window(
+                expression=DenseRank(),
+                order_by=[F('score').desc(), F('id').desc()]))
+    # Included id in ordering, to avoid getting duplicate ranking for same scores.
     serializer_class = AspiranteSerializer
+
+    def list(self, request):
+        # Overrode this method to only return 20, and get my current position
+        first_20 = self.get_queryset()
+        serializer = AspiranteSerializer(first_20, many=True)
+        result = serializer.data
+        # TODO: if user is admin, this could raise exception
+        me = list(filter(lambda x: x['user_id'] == request.user.id, result))[0]
+        return Response({'leaderboard': result[:20], 'me': me})
 
     @action(detail=False, methods=['GET', 'PATCH'])
     def me(self, request):
