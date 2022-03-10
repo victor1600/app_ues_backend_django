@@ -99,6 +99,16 @@ class AspiranteSerializer(serializers.ModelSerializer):
     n_exams_completed = serializers.IntegerField(read_only=True)
     rank = serializers.IntegerField(read_only=True)
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in ['rank']:
+            try:
+                if rep[field] is None:
+                    rep.pop(field)
+            except KeyError:
+                pass
+        return rep
+
     class Meta:
         model = Aspirante
         fields = ['id','imagen','first_name', 'last_name', 'score', 'average_grades',

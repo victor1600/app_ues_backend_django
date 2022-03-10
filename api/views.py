@@ -123,10 +123,9 @@ class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
 
     def list(self, request):
         # Overrode this method to only return 20, and get my current position
-        first_20 = self.get_queryset()
-        serializer = AspiranteSerializer(first_20, many=True)
+        students = self.get_queryset()
+        serializer = AspiranteSerializer(students, many=True)
         result = serializer.data
-        # TODO: if user is admin, this could raise exception
         me = list(filter(lambda x: x['user_id'] == request.user.id, result))[0]
         return Response({'leaderboard': result[:20], 'me': me})
 
@@ -136,13 +135,12 @@ class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
             return Response("Usuario no tiene perfil de aspirante asociado")
         logger.info(request.user)
         aspirante = get_object_or_404(self.queryset, user_id=request.user.id)
+        aspirante.rank = None
         if request.method == 'GET':
             logger.info(f'{request.user} ')
             serializer = AspiranteSerializer(aspirante, context={'request': request})
             return Response(serializer.data)
         elif request.method == 'PATCH':
-            print(aspirante)
-            print(request.data)
             serializer = AspiranteSerializer(aspirante, data=request.data, partial=True, context={'request': request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
