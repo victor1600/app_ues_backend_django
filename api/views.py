@@ -110,8 +110,8 @@ User = get_user_model()
 
 
 class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Aspirante.objects.annotate(score=Coalesce(Sum('examen__nota'), 0.0))\
-        .annotate(n_exams_completed=Coalesce(Count('examen'),0)) \
+    queryset = Aspirante.objects.select_related('user').annotate(score=Coalesce(Sum('examen__nota'), 0.0))\
+        .annotate(n_exams_completed=Coalesce(Count('examen'), 0)) \
         .order_by('-score')
     serializer_class = AspiranteSerializer
 

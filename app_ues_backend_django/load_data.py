@@ -34,6 +34,9 @@ for d in get_files(courses_path):
     topics_path = f'{courses_path}/{d}'
     for t in get_files(topics_path):
         topic, topic_create = Tema.objects.get_or_create(texto=t, curso=course)
+        if not topic_create:
+            # TODO: check if this is working
+            continue
         pdfs_path = f'{topics_path}/{t}/pdf'
         for pdf in get_files(pdfs_path):
             try:
