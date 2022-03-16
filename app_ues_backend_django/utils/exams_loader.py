@@ -26,10 +26,11 @@ def load_exam(xml_exam, txt_exam):
             question = {"numero_pregunta": i+1}
             raw_qt = q.get('questiontext').get('text')
             try:
-                question_text = None
-                htmlParse = BeautifulSoup(raw_qt, 'html.parser')
-                for para in htmlParse.find_all("p"):
-                    question_text = para.get_text()
+                result = ''.join(list(
+                    filter(lambda y: len(y) > 3 and 'img' not in y and 'span' not in y and 'strong' not in y,
+                           re.split(r'[<>]', raw_qt))))
+                question_text = re.sub(' +', ' ', result)
+                question_text = question_text.replace("br /", "")
                 if 'data:image/png;base64' in raw_qt:
                     q['questiontext']['file'] = {}
                     img = str(raw_qt.split("src=")[1].split(" alt")[0]).split("base64,")[1]
