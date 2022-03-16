@@ -1,6 +1,7 @@
 import json
 import re
 import xmltodict
+from bs4 import BeautifulSoup
 
 
 def load_exam(xml_exam, txt_exam):
@@ -25,11 +26,10 @@ def load_exam(xml_exam, txt_exam):
             question = {"numero_pregunta": i+1}
             raw_qt = q.get('questiontext').get('text')
             try:
-                result = ''.join(list(
-                    filter(lambda y: len(y) > 3 and 'img' not in y and 'span' not in y and 'strong' not in y,
-                           re.split(r'[<>]', raw_qt))))
-                question_text = re.sub(' +', ' ', result)
-                question_text = question_text.replace("br /", "")
+                question_text = None
+                htmlParse = BeautifulSoup(raw_qt, 'html.parser')
+                for para in htmlParse.find_all("p"):
+                    question_text = para.get_text()
                 if 'data:image/png;base64' in raw_qt:
                     q['questiontext']['file'] = {}
                     img = str(raw_qt.split("src=")[1].split(" alt")[0]).split("base64,")[1]
@@ -55,15 +55,17 @@ def load_exam(xml_exam, txt_exam):
             answers = []
             for a, l in zip(q.get('answer'), ['A', 'B', 'C', 'D', 'E']):
                 answer = {}
-                text = ''.join(list(
-                    filter(
-                        lambda y: 'img' not in y and 'span' not in y and 'strong' not in y and y != 'p' and y != '/p',
-                        re.split(r'[<>]', a['text']))))
-                text = text.replace("br /", "")
+                text = None
+                htmlParse = BeautifulSoup(a['text'], 'html.parser')
+                for para in htmlParse.find_all("p"):
+                    text = para.get_text()
 
-                if 'data:image/png;base64' in text:
+                if 'data:image/png;base64' in a['text']:
                     a['file'] = {}
-                    img2 = str(raw_qt.split("src=")[1].split(" alt")[0]).split("base64,")[1]
+                    try:
+                        img2 = str(a['text'].split("src=")[1].split(" alt")[0]).split("base64,")[1]
+                    except IndexError:
+                        print(a['text'])
                     a['file']['#text'] = img2
                 if text:
                     answer['texto'] = text
