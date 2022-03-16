@@ -1,3 +1,4 @@
+import binascii
 import sys, os, django
 from dotenv import load_dotenv
 from logging import getLogger
@@ -23,7 +24,9 @@ def get_files(path):
 
 
 def b64_to_img(img):
-    return ContentFile(base64.b64decode(img), name='file.png')
+
+    c = ContentFile(base64.b64decode(img), name='file.png')
+    return c
 
 
 from api.models import *

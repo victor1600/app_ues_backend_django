@@ -1,3 +1,4 @@
+import json
 import re
 import xmltodict
 
@@ -29,6 +30,12 @@ def load_exam(xml_exam, txt_exam):
                            re.split(r'[<>]', raw_qt))))
                 question_text = re.sub(' +', ' ', result)
                 question_text = question_text.replace("br /", "")
+                if 'data:image/png;base64' in raw_qt:
+                    q['questiontext']['file'] = {}
+                    img = str(raw_qt.split("src=")[1].split(" alt")[0]).split("base64,")[1]
+                    q['questiontext']['file']['#text'] = img
+
+
             except:
                 print('Error detected, skipping')
                 print(xml_exam)
@@ -53,6 +60,11 @@ def load_exam(xml_exam, txt_exam):
                         lambda y: 'img' not in y and 'span' not in y and 'strong' not in y and y != 'p' and y != '/p',
                         re.split(r'[<>]', a['text']))))
                 text = text.replace("br /", "")
+
+                if 'data:image/png;base64' in text:
+                    a['file'] = {}
+                    img2 = str(raw_qt.split("src=")[1].split(" alt")[0]).split("base64,")[1]
+                    a['file']['#text'] = img2
                 if text:
                     answer['texto'] = text
 
