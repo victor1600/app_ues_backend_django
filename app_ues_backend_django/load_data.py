@@ -1,4 +1,6 @@
 import sys, os, django
+
+from django.core.files.base import ContentFile
 from dotenv import load_dotenv
 from logging import getLogger
 from django.core.files import File
