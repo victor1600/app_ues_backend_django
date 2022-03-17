@@ -1,12 +1,9 @@
-import binascii
 import sys, os, django
 from dotenv import load_dotenv
 from logging import getLogger
 from django.core.files import File
 from utils.exams_loader import load_exam
 import base64
-
-from django.core.files.base import ContentFile
 
 load_dotenv()
 django_settings_module = os.getenv('DJANGO_SETTINGS_MODULE')

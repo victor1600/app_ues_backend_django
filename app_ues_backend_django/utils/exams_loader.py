@@ -21,16 +21,25 @@ def load_exam(xml_exam, txt_exam):
         xml_file.close()
         data = data_dict.get('quiz').get('question')
         multiple_choice_questions = list(filter(lambda x: x.get("@type") == 'multichoice', data))
-        # for i, (name, age) in enumerate(zip(names, ages)):
         for i, (q, right_answer) in enumerate(zip(multiple_choice_questions, right_answers)):
-            question = {"numero_pregunta": i+1}
+            question = {"numero_pregunta": i + 1}
             raw_qt = q.get('questiontext').get('text')
+            # TODO: decide best approach
             try:
-                result = ''.join(list(
-                    filter(lambda y: len(y) > 3 and 'img' not in y and 'span' not in y and 'strong' not in y,
-                           re.split(r'[<>]', raw_qt))))
-                question_text = re.sub(' +', ' ', result)
-                question_text = question_text.replace("br /", "")
+
+                question_text = None
+                htmlParse = BeautifulSoup(raw_qt, 'html.parser')
+                for para in htmlParse.find_all("p"):
+                    question_text = para.get_text()
+
+                if not question_text:
+                    result = ''.join(list(
+                        filter(lambda y: len(y) > 3 and 'img' not in y and 'span' not in y and 'strong' not in y,
+                               re.split(r'[<>]', raw_qt))))
+                    question_text = re.sub(' +', ' ', result)
+                    question_text = question_text.replace("br /", "")
+                if 'sup' in question_text:
+                    continue
                 if 'data:image/png;base64' in raw_qt:
                     q['questiontext']['file'] = {}
                     img = str(raw_qt.split("src=")[1].split(" alt")[0]).split("base64,")[1]
@@ -53,6 +62,10 @@ def load_exam(xml_exam, txt_exam):
                 question['imagen'] = img
             if question_text:
                 question['texto'] = question_text
+
+            if 'imagen' not in question:
+                if not question.get('texto') or question.get('texto').isspace():
+                    continue
             answers = []
             for a, l in zip(q.get('answer'), ['A', 'B', 'C', 'D', 'E']):
                 answer = {}
@@ -84,7 +97,6 @@ def load_exam(xml_exam, txt_exam):
                     answer['es_respuesta_correcta'] = True
                 else:
                     answer['es_respuesta_correcta'] = False
-                # answer.pop('literal')
                 answers.append(answer)
 
             question['answers'] = answers
