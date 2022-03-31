@@ -73,7 +73,6 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
             except:
                 # TODO: implement better logic for this validation
                 logger.warning('Invalid limit query param')
-                pass
         return self.queryset.all().order_by('?')
 
 
@@ -113,11 +112,11 @@ User = get_user_model()
 
 class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
     # TODO: annotate with position
-    queryset = Aspirante.objects.select_related('user').annotate(score=Coalesce(Sum('examen__nota'), 0.0))\
+    queryset = Aspirante.objects.select_related('user').annotate(score=Coalesce(Sum('examen__nota'), 0.0)) \
         .annotate(n_exams_completed=Coalesce(Count('examen'), 0)) \
         .order_by('-score').annotate(rank=Window(
-                expression=DenseRank(),
-                order_by=[F('score').desc(), F('id').desc()]))
+        expression=DenseRank(),
+        order_by=[F('score').desc(), F('id').desc()]))
     # Included id in ordering, to avoid getting duplicate ranking for same scores.
     serializer_class = AspiranteSerializer
 
@@ -145,4 +144,3 @@ class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
-

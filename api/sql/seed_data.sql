@@ -3,7 +3,7 @@ INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES
 INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (2, 'Lenguaje', '', '2022-02-05 20:39:25.054127', 'photos/icons/2022/02/05/lenguaje.jpg', 1);
 INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (3, 'Biologia', '', '2022-02-05 20:39:39.337348', 'photos/icons/2022/02/05/biologia.png', 1);
 INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (4, 'Sociales', '', '2022-02-05 20:39:54.577533', 'photos/icons/2022/02/05/sociales.jpg', 1);
-INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (5, 'Química', '', '2022-02-05 20:40:23.655649', 'photos/icons/2022/02/05/qumica.png', 1);
+INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (5, 'Quimica', '', '2022-02-05 20:40:23.655649', 'photos/icons/2022/02/05/qumica.png', 1);
 INSERT INTO api_curso (id, texto, descripcion, created_at, icono, activo) VALUES (6, 'Fisica', '', '2022-02-05 20:40:57.274821', 'photos/icons/2022/02/05/fisica.png', 1);
 
 -- -- Topic
