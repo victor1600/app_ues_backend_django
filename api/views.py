@@ -1,9 +1,22 @@
-from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
+from api.signals import *
+from django.contrib.auth import get_user_model
+from django.db.models import Q, Sum, Count, F, Value
+from django.db.models.functions import Coalesce, RowNumber, Rank, DenseRank
+from rest_framework.pagination import PageNumberPagination
+from django.db.models.expressions import RawSQL, Window
 
 import logging
+
+from rest_framework.viewsets import GenericViewSet
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .serializers import *
 from .models import *
 from rest_framework import viewsets, status
@@ -44,11 +57,13 @@ class AnswerViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     # Get just active questions in the exam
-    queryset = Pregunta.objects.filter(activo=True)
+    queryset = Pregunta.objects.prefetch_related('answers').filter(activo=True)
     serializer_class = ExamQuestionsAndAnswersSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tema']
 
+    # TODO: CONSIDERING RETURNING EQUALLY SIZED CHUNKS OF EVERY COURSE.
+    # TODO: configure limitations.
     def get_queryset(self):
         if 'limit' in self.request.query_params.keys():
             try:
@@ -58,7 +73,6 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
             except:
                 # TODO: implement better logic for this validation
                 logger.warning('Invalid limit query param')
-                pass
         return self.queryset.all().order_by('?')
 
 
@@ -70,5 +84,63 @@ class GradeView(APIView):
 
             grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
                         .count() / len(answer_ids) * 10
-            return Response({"grade": round(grade, 2)}, status=status.HTTP_200_OK)
+            notas_parciales = {}
+            for a_id in answer_ids:
+                answer = Respuesta.objects.get(pk=a_id)
+                question = answer.pregunta
+
+                if question.tema.curso.texto not in notas_parciales:
+                    notas_parciales[question.tema.curso.texto] = []
+
+                notas_parciales[question.tema.curso.texto].append(answer.es_respuesta_correcta)
+
+            for k, v in notas_parciales.items():
+                notas_parciales[k] = sum(v) / len(v) * 10
+
+            grade = round(grade, 2)
+            response = {"grade": grade, "partial_grades": notas_parciales,
+                        }
+            # TODO: implement signal history saving
+            exam_finished.send_robust(sender=None, data=response, user=request.user)
+
+            return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+User = get_user_model()
+
+
+class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
+    # TODO: annotate with position
+    queryset = Aspirante.objects.select_related('user').annotate(score=Coalesce(Sum('examen__nota'), 0.0)) \
+        .annotate(n_exams_completed=Coalesce(Count('examen'), 0)) \
+        .order_by('-score').annotate(rank=Window(
+        expression=DenseRank(),
+        order_by=[F('score').desc(), F('id').desc()]))
+    # Included id in ordering, to avoid getting duplicate ranking for same scores.
+    serializer_class = AspiranteSerializer
+
+    def list(self, request):
+        # Overrode this method to only return 20, and get my current position
+        students = self.get_queryset()
+        serializer = AspiranteSerializer(students, many=True)
+        result = serializer.data
+        me = list(filter(lambda x: x['user_id'] == request.user.id, result))[0]
+        return Response({'leaderboard': result[:20], 'me': me})
+
+    @action(detail=False, methods=['GET', 'PATCH'])
+    def me(self, request):
+        if request.user.is_anonymous:
+            return Response("Usuario no tiene perfil de aspirante asociado")
+        logger.info(request.user)
+        aspirante = get_object_or_404(self.queryset, user_id=request.user.id)
+        aspirante.rank = None
+        if request.method == 'GET':
+            logger.info(f'{request.user} ')
+            serializer = AspiranteSerializer(aspirante, context={'request': request})
+            return Response(serializer.data)
+        elif request.method == 'PATCH':
+            serializer = AspiranteSerializer(aspirante, data=request.data, partial=True, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)

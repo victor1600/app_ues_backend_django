@@ -1,0 +1,70 @@
+{
+    "grade": 0.0,
+    "wrongs": [
+        [
+            {
+                "pregunta": {
+                    "id": 1,
+                    "texto": "1) Establezca la propiedad de los números reales que se está usando en la siguiente igualdad:(x+2y) +3z = x+(2y+3z).",
+                    "created_at": "2022-03-03T14:24:56.119263Z",
+                    "activo": true,
+                    "numero_pregunta": 1,
+                    "tema": 6
+                },
+                "respuestas": [
+                    {
+                        "id": 3,
+                        "texto": "Propiedad asociativa de la multiplicación",
+                        "created_at": "2022-03-03T14:24:56.211338Z",
+                        "es_respuesta_correcta": false,
+                        "activo": true,
+                        "literal": "C",
+                        "pregunta": 1
+                    },
+                    {
+                        "id": 2,
+                        "texto": "Propiedad  asociativa  de la suma",
+                        "created_at": "2022-03-03T14:24:56.182740Z",
+                        "es_respuesta_correcta": true,
+                        "activo": true,
+                        "literal": "B",
+                        "pregunta": 1
+                    }
+                ]
+            }
+        ],
+        [
+            {
+                "pregunta": {
+                    "id": 3,
+                    "texto": "Al calcular se obtiene:",
+                    "created_at": "2022-03-03T14:24:56.411560Z",
+                    "imagen": "/media/photos/question_images/2022/03/03/file_9mQjDPl.png",
+                    "activo": true,
+                    "numero_pregunta": 3,
+                    "tema": 6
+                },
+                "respuestas": [
+                    {
+                        "id": 11,
+                        "texto": "-12",
+                        "created_at": "2022-03-03T14:24:56.528904Z",
+                        "es_respuesta_correcta": false,
+                        "activo": true,
+                        "literal": "D",
+                        "pregunta": 3
+                    },
+                    {
+                        "id": 10,
+                        "texto": "6",
+                        "created_at": "2022-03-03T14:24:56.501796Z",
+                        "es_respuesta_correcta": true,
+                        "activo": true,
+                        "literal": "C",
+                        "pregunta": 3
+                    }
+                ]
+            }
+        ]
+    ]
+}

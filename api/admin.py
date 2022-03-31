@@ -13,6 +13,7 @@ class TopicItemInline(admin.TabularInline):
 class QuestionItemInline(admin.TabularInline):
     model = Pregunta
     extra = 0
+    exclude = ['dificultad', 'numero_pregunta']
 
 
 class MaterialItemInline(admin.TabularInline):
@@ -23,6 +24,7 @@ class MaterialItemInline(admin.TabularInline):
 class AnswerItemInline(admin.TabularInline):
     model = Respuesta
     extra = 0
+    exclude = ['literal']
 
 
 @admin.register(Curso)
@@ -113,6 +115,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_select_related = ['tema']
     search_fields = ['exto__istartswith']
+    exclude = ['dificultad', 'numero_pregunta']
 
     def tema(self, question):
         url = reverse('admin:api_tema_change', args=(question.tema.id,))
@@ -140,7 +143,7 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(Respuesta)
 class AnswerAdmin(admin.ModelAdmin):
     autocomplete_fields = ['pregunta']
-    list_display = ['texto', 'es_respuesta_correcta', 'pregunta']
+    list_display = ['texto', 'es_respuesta_correcta', 'pregunta', 'imagen']
     list_editable = ['es_respuesta_correcta']
     # filtering by grandparent
     # TODO: Considering if in filtering we should add 'question'
@@ -148,6 +151,7 @@ class AnswerAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_select_related = ['pregunta']
     search_fields = ['texto__istartswith']
+    exclude = ['literal']
 
     def pregunta(self, answer):
         # Connect to parent

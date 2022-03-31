@@ -5,6 +5,7 @@ services:
     command: ./wait-for-it.sh mysql:3306 -- ./docker-entrypoint.sh
     ports:
       - 8000:8000
+      - 8089:8089
     depends_on:
       - mysql
     restart: on-failure
@@ -38,8 +39,8 @@ services:
       - static_volume:/app/static
       - media_volume:/app/media
     ports:
-      # this is optimized to run in prod
-      - 8080:80
+      # this is optimized to run in prod1
+      - 1337:80
     depends_on:
       - web
 

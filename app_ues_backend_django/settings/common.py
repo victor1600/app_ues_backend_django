@@ -30,26 +30,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 CORS_ORIGIN_ALLOW_ALL = True
 
 INSTALLED_APPS = [
-    'admin_interface',
-    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
-    'users',
     'rest_framework',
-    # 'rest_framework.authtoken',  # Add this line
-    # 'rest_auth',
     'django_cleanup.apps.CleanupConfig',
     'django_filters',
+    'djoser',
     'corsheaders',
     "debug_toolbar",
+    'user',
+    'api',
+    'rest_framework_simplejwt',
 ]
 
-X_FRAME_OPTIONS='SAMEORIGIN'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -136,65 +134,42 @@ MANAGED = truthiness(get_env('MANAGED', 'true'))
 
 # RIGHT CONFIGURATION FOR STATIC
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Auth and JWT
-
-AUTH_USER_MODEL = 'users.CustomUser'
-
 AUTHENTICATION_BACKENDS = [
+    'user.backends.CustomAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'users.backends.CustomAuthBackend'
+
 ]
 
 REQUIRE_PERMISSION_CHECK = truthiness(get_env('REQUIRE_PERMISSION_CHECK', 'false'))
 if REQUIRE_PERMISSION_CHECK:
-    REST_FRAMEWORK = {'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ), 'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]}
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
 
-# Jwt Authentication
-# https://github.com/jpadilla/django-rest-framework-jwt/blob/master/rest_framework_jwt/settings.py
-JWT_AUTH = {
-    'JWT_ENCODE_HANDLER':
-        'rest_framework_jwt.utils.jwt_encode_handler',
+        )
+        , 'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ]
+    }
 
-    'JWT_DECODE_HANDLER':
-        'rest_framework_jwt.utils.jwt_decode_handler',
+    SIMPLE_JWT = {
+       'AUTH_HEADER_TYPES': ('Bearer',),
+        'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    }
 
-    'JWT_PAYLOAD_HANDLER':
-        'rest_framework_jwt.utils.jwt_payload_handler',
 
-    'JWT_PAYLOAD_GET_USER_ID_HANDLER':
-        'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
-
-    'JWT_RESPONSE_PAYLOAD_HANDLER':
-        'rest_framework_jwt.utils.jwt_response_payload_handler',
-
-    'JWT_SECRET_KEY': 'SECRET_KEY',
-    'JWT_GET_USER_SECRET_KEY': None,
-    'JWT_PUBLIC_KEY': None,
-    'JWT_PRIVATE_KEY': None,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA': timedelta(days=30),
-    'JWT_AUDIENCE': None,
-    'JWT_ISSUER': None,
-
-    'JWT_ALLOW_REFRESH': False,
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=30),
-
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_AUTH_COOKIE': None,
-}
+    DJOSER = {
+        'SERIALIZERS': {
+            'user_create': 'user.serializers.UserCreateSerializer',
+            'current_user': 'user.serializers.UserSerializer',
+        }
+    }
 
 LOGGING = {
     'version': 1,
@@ -224,3 +199,4 @@ LOGGING = {
     }
 }
 
+AUTH_USER_MODEL = 'user.User'

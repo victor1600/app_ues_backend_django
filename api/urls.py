@@ -10,9 +10,9 @@ router.register(r'materials', views.MaterialViewSet)
 router.register(r'questions', views.QuestionViewSet)
 router.register(r'answers', views.AnswerViewSet)
 router.register(r'exam-questions', views.ExamQuestionsAndAnswersViewSet)
+router.register(r'aspirantes', views.CandidateApiViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('calculate-grade/', views.GradeView.as_view())
-    # path('auth/', include('rest_auth.urls')),
+    path('calculate-grade/', views.GradeView.as_view()),
 ]
