@@ -21,7 +21,11 @@ def load_exam(xml_exam, txt_exam):
         xml_file.close()
         data = data_dict.get('quiz').get('question')
         multiple_choice_questions = list(filter(lambda x: x.get("@type") == 'multichoice', data))
+        iterations = 0
         for i, (q, right_answer) in enumerate(zip(multiple_choice_questions, right_answers)):
+            iterations += 1
+            if iterations > 10:
+                break
             question = {"numero_pregunta": i + 1}
             raw_qt = q.get('questiontext').get('text')
             # TODO: decide best approach
