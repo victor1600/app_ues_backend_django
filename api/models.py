@@ -127,15 +127,15 @@ class Aspirante(models.Model):
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
 
-# class PuntuacionTemaUsuario(models.Model):
-#     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
-#     aspirante = models.ForeignKey(Aspirante, on_delete=models.CASCADE)
-#     puntuacion = models.FloatField(max_length=4)
-#     # TODO: add property for current level
 
-    # @property
-    # def nivel_actual(self):
-    #     if puntuacion >
+class PuntuacionTemaAspirante(models.Model):
+    tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
+    aspirante = models.ForeignKey(Aspirante, on_delete=models.CASCADE)
+    puntuacion = models.FloatField(max_length=4, default=0.0)
+
+    class Meta:
+        unique_together = ('tema', 'aspirante',)
+
 
 class HistoricoExamen(models.Model):
     nota = models.FloatField(max_length=4)

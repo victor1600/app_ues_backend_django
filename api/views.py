@@ -89,9 +89,14 @@ class GradeView(APIView):
             grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
                         .count() / len(answer_ids) * 10
             notas_parciales = {}
+            # TODO: SI TODAS LAS PREGUNTAS CORRESPONDEN A UN SOLO TEMA, ENTONCES CALCULAR PUNTAJE Y ACTUALIZAR
+            # (TODO) EN TABLA CORRESPONDIENTE
+            topics = []
+
             for a_id in answer_ids:
                 answer = Respuesta.objects.get(pk=a_id)
                 question = answer.pregunta
+                topics.append(question.tema)
 
                 if question.tema.curso.texto not in notas_parciales:
                     notas_parciales[question.tema.curso.texto] = []
@@ -104,7 +109,7 @@ class GradeView(APIView):
             grade = round(grade, 2)
             response = {"grade": grade, "partial_grades": notas_parciales}
             # TODO: implement signal history saving
-            exam_finished.send_robust(sender=None, data=response, user=request.user)
+            exam_finished.send_robust(sender=None, data=response, user=request.user, topics=topics)
 
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -17,7 +17,7 @@ class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tema
         exclude = ('created_at', 'activo')
-        # TODO: CONSIDER returning puntuacion
+        # TODO: CONSIDER returning puntuacion por usuario
 
 
 class MaterialSerializer(serializers.ModelSerializer):
