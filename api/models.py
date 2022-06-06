@@ -20,6 +20,24 @@ class Curso(models.Model):
         # TODO: refactor table names
         ordering = ['texto','created_at']
 
+class Nivel(models.Model):
+    DIFFICULTY_BASIC = 'Basico'
+    DIFFICULTY_INTERMEDIATE = 'Intermedio'
+    DIFFICULTY_ADVANCED = 'Avanzado'
+
+    DIFFICULTY_LEVELS = [
+        (DIFFICULTY_BASIC, 'Basico'),
+        (DIFFICULTY_INTERMEDIATE, 'Intermedio'),
+        (DIFFICULTY_ADVANCED, 'Avanzado'),
+    ]
+    dificultad = models.CharField(max_length=15, choices=DIFFICULTY_LEVELS, default=DIFFICULTY_BASIC, unique=True)
+    puntos_necesarios = models.FloatField(max_length=6)
+
+    class Meta:
+        verbose_name_plural = "niveles"
+
+    def __str__(self):
+        return self.dificultad
 
 class Tema(models.Model):
     # TODO: analyze if should be unique or not...
@@ -28,6 +46,7 @@ class Tema(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
+    nivel = models.ForeignKey(Nivel, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return self.texto
@@ -50,6 +69,8 @@ class Material(models.Model):
 
     class Meta:
         managed = settings.MANAGED
+        verbose_name_plural = "materiales"
+
 
 
 class Pregunta(models.Model):
@@ -59,7 +80,7 @@ class Pregunta(models.Model):
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
     numero_pregunta = models.IntegerField(null=True,blank=True)
-    dificultad = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
+    dificultad = models.IntegerField(default=0, blank=True,null=True)
 
     def __str__(self):
         if self.texto:
@@ -106,6 +127,15 @@ class Aspirante(models.Model):
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
 
+# class PuntuacionTemaUsuario(models.Model):
+#     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
+#     aspirante = models.ForeignKey(Aspirante, on_delete=models.CASCADE)
+#     puntuacion = models.FloatField(max_length=4)
+#     # TODO: add property for current level
+
+    # @property
+    # def nivel_actual(self):
+    #     if puntuacion >
 
 class HistoricoExamen(models.Model):
     nota = models.FloatField(max_length=4)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Curso, Material, Tema, Respuesta, Pregunta
+from .models import Curso, Material, Tema, Respuesta, Pregunta, Nivel
 from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
@@ -58,7 +58,7 @@ class CourseAdmin(admin.ModelAdmin):
 class TopicAdmin(admin.ModelAdmin):
     autocomplete_fields = ['curso']
     inlines = [QuestionItemInline, MaterialItemInline]
-    list_display = ['texto', 'curso', 'preguntas_por_tema', 'materiales_por_tema', 'activo']
+    list_display = ['texto', 'curso', 'nivel' ,'preguntas_por_tema', 'materiales_por_tema', 'activo']
     list_editable = ['activo']
     list_filter = ['curso']
     list_per_page = 10
@@ -168,3 +168,14 @@ class MaterialAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_select_related = ['tema']
     search_fields = ['texto__istartswith']
+
+
+@admin.register(Nivel)
+class NivelAdmin(admin.ModelAdmin):
+    list_display = ['dificultad', 'puntos_necesarios']
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

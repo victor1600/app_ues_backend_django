@@ -44,6 +44,9 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['curso']
 
+    # TODO: implement is_available, performing a calculation on dependents previous score.
+    # TODO: Luego de lograr sacar mas de 6, tres veces en ambos temas, se desbloquea el siguiente.
+
 
 class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Pregunta.objects.filter(activo=True)
@@ -62,8 +65,8 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tema']
 
-    # TODO: CONSIDERING RETURNING EQUALLY SIZED CHUNKS OF EVERY COURSE.
-    # TODO: configure limitations.
+    # TODO: When exam is general, configure sending  Q&A that the user has unlocked so far?
+    # Consider using Bronze, silver and gold.
     def get_queryset(self):
         if 'limit' in self.request.query_params.keys():
             try:
@@ -78,6 +81,7 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
 
 class GradeView(APIView):
     def post(self, request, format=None):
+        # TODO: Si es un examen por tema, hacer calculo y almacenar puntaje en el historico.
         serializer = ExamResultSerializer(data=request.data)
         if serializer.is_valid():
             answer_ids = serializer.data.get("answers")
@@ -98,8 +102,7 @@ class GradeView(APIView):
                 notas_parciales[k] = sum(v) / len(v) * 10
 
             grade = round(grade, 2)
-            response = {"grade": grade, "partial_grades": notas_parciales,
-                        }
+            response = {"grade": grade, "partial_grades": notas_parciales}
             # TODO: implement signal history saving
             exam_finished.send_robust(sender=None, data=response, user=request.user)
 

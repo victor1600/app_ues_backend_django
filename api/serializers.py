@@ -16,22 +16,20 @@ class CourseSerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tema
-        # fields = '__all__'
         exclude = ('created_at', 'activo')
+        # TODO: CONSIDER returning puntuacion
 
 
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
-        # fields = '__all__'
         exclude = ('created_at', 'activo')
 
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pregunta
-        # fields = '__all__'
-        exclude = ('created_at', 'activo', 'numero_pregunta', 'dificultad')
+        exclude = ('created_at', 'activo', 'numero_pregunta')
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
