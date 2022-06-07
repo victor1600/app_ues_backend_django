@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django_filters',
     'djoser',
     'corsheaders',
-    "debug_toolbar",
     'user',
     'api',
     'rest_framework_simplejwt',
@@ -50,7 +49,7 @@ INSTALLED_APPS = [
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
