@@ -42,10 +42,29 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tema.objects.filter(activo=True)
     serializer_class = TopicSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['curso']
+    filterset_fields = ['curso', 'nivel']
 
     # TODO: implement is_available, performing a calculation on dependents previous score.
     # TODO: Luego de lograr sacar mas de 6, tres veces en ambos temas, se desbloquea el siguiente.
+    @action(detail=False, methods=['GET'])
+    def get_levels(self, request):
+        levels = {l.dificultad: [] for l in Nivel.objects.all()}
+        topics_by_level = {**levels}
+        course_id = self.request.query_params.get('curso')
+        curso = Curso.objects.filter(pk=course_id).first()
+        if curso:
+            for topic in Tema.objects.filter(curso=curso):
+                topics_by_level[topic.nivel_actual].append(TopicSerializer(topic, context={'request': request}).data)
+            # TODO: calculate current user level
+            for level, topics in topics_by_level.items():
+                if topics:
+                    levels[level] = all(map(lambda x: x['nivel_usuario_actual']==Nivel.DIFFICULTY_ADVANCED, topics))
+                else:
+                    levels[level] = False
+
+            return Response({"topics_by_level": topics_by_level, "user_unlocked_levels": levels})
+        else:
+            raise serializers.ValidationError("You have to send a valid course.")
 
 
 class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -108,7 +127,6 @@ class GradeView(APIView):
 
             grade = round(grade, 2)
             response = {"grade": grade, "partial_grades": notas_parciales}
-            # TODO: implement signal history saving
             exam_finished.send_robust(sender=None, data=response, user=request.user, topics=topics)
 
             return Response(response, status=status.HTTP_200_OK)

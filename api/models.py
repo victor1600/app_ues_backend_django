@@ -18,7 +18,8 @@ class Curso(models.Model):
     class Meta:
         managed = settings.MANAGED
         # TODO: refactor table names
-        ordering = ['texto','created_at']
+        ordering = ['texto', 'created_at']
+
 
 class Nivel(models.Model):
     DIFFICULTY_BASIC = 'Basico'
@@ -39,6 +40,7 @@ class Nivel(models.Model):
     def __str__(self):
         return self.dificultad
 
+
 class Tema(models.Model):
     # TODO: analyze if should be unique or not...
     texto = models.CharField(max_length=255)
@@ -46,10 +48,14 @@ class Tema(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
-    nivel = models.ForeignKey(Nivel, on_delete=models.PROTECT, blank=True, null=True)
+    nivel = models.ForeignKey(Nivel, on_delete=models.PROTECT, blank=True, null=True, default=1)
 
     def __str__(self):
         return self.texto
+
+    @property
+    def nivel_actual(self):
+        return self.nivel.dificultad if self.nivel else Nivel.objects.filter(pk=1).first().dificultad
 
     class Meta:
         managed = settings.MANAGED
@@ -72,15 +78,13 @@ class Material(models.Model):
         verbose_name_plural = "materiales"
 
 
-
 class Pregunta(models.Model):
     texto = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True, blank=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
-    numero_pregunta = models.IntegerField(null=True,blank=True)
-    dificultad = models.IntegerField(default=0, blank=True,null=True)
+    numero_pregunta = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         if self.texto:
@@ -100,7 +104,7 @@ class Respuesta(models.Model):
     es_respuesta_correcta = models.BooleanField()
     activo = models.BooleanField(default=True)
     # TODO: consider adding 'literal field'
-    literal = models.CharField(max_length=2, null=True,blank=True)
+    literal = models.CharField(max_length=2, null=True, blank=True)
     imagen = models.ImageField(upload_to='photos/answer_images/%Y/%m/%d/', null=True, blank=True)
 
     def __str__(self):
@@ -118,6 +122,7 @@ class Aspirante(models.Model):
     fecha_de_nacimiento = models.DateField(null=True, blank=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     imagen = models.TextField(null=True, blank=True)
+
     # TODO: implement profile picture
     # DISPLAY DEFAULT IMAGE IN FRONTEND IF NO IMAGE SET BY USER FOUND.
 
@@ -136,6 +141,14 @@ class PuntuacionTemaAspirante(models.Model):
     class Meta:
         unique_together = ('tema', 'aspirante',)
 
+    def __str__(self):
+        return f'id={self.id} tema={self.tema}, aspirante={self.aspirante}, puntuacion={self.puntuacion}'
+
+    @property
+    def nivel_actual(self):
+        return Nivel.objects.order_by('-puntos_necesarios')\
+            .filter(puntos_necesarios__lte=self.puntuacion).first().dificultad
+
 
 class HistoricoExamen(models.Model):
     nota = models.FloatField(max_length=4)
@@ -147,4 +160,3 @@ class HistoricoExamenCurso(models.Model):
     examen = models.ForeignKey(HistoricoExamen, on_delete=models.CASCADE, related_name='examen')
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='examen_curso')
     nota = models.FloatField(max_length=4)
-

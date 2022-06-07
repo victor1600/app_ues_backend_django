@@ -36,9 +36,9 @@ for d in get_files(courses_path):
     topics_path = f'{courses_path}/{d}'
     for t in get_files(topics_path):
         topic, topic_create = Tema.objects.get_or_create(texto=t, curso=course)
-        if not topic_create:
-            # TODO: check if this is working
-            continue
+        # if not topic_create:
+        #     # TODO: check if this is working
+        #     continue
         pdfs_path = f'{topics_path}/{t}/pdf'
         for pdf in get_files(pdfs_path):
             try:
@@ -56,35 +56,35 @@ for d in get_files(courses_path):
                 txt_exam = list(filter(lambda x: '.txt' in x, exam_files))[0]
             except:
                 print(exam_files)
-            exam = load_exam(f'{exams_path}/{xml_exam}', f'{exams_path}/{txt_exam}')
-            for i, q in enumerate(exam):
-                if 'texto' not in q.keys():
-                    # TODO: don't send this to client
-                    # TODO: fix this, this might create duplicates as i could change.
-                    q['texto'] = f'autogenerado_{topic}_{i + 1}'
-
-                if 'imagen' in q.keys():
-                    q['imagen'] = b64_to_img(q.get('imagen'))
-
-                answers = q.pop('answers')
-
-                try:
-                    question, q_created = Pregunta.objects.get_or_create(**q, tema=topic)
-                    if q_created:
-                        logger.info(f'Created question for {topic}')
-                except django.db.utils.IntegrityError:
-                    pass
-
-                for y, a in enumerate(answers):
-                    if 'imagen' in a.keys():
-                        a['imagen'] = b64_to_img(a.get('imagen'))
-
-                    # if 'texto' not in a.keys():
-                    #     # TODO: don't send this to client
-                    #     # TODO: fix this, this might create duplicates as i could change.
-                    if 'texto' not in a.keys():
-                        a['texto'] = f'autogenerado_{question.id}_{a["literal"]}'
-                    try:
-                        Respuesta.objects.get_or_create(**a, pregunta=question)
-                    except django.db.utils.IntegrityError as e:
-                        pass
+            # exam = load_exam(f'{exams_path}/{xml_exam}', f'{exams_path}/{txt_exam}')
+            # for i, q in enumerate(exam):
+            #     if 'texto' not in q.keys():
+            #         # TODO: don't send this to client
+            #         # TODO: fix this, this might create duplicates as i could change.
+            #         q['texto'] = f'autogenerado_{topic}_{i + 1}'
+            #
+            #     if 'imagen' in q.keys():
+            #         q['imagen'] = b64_to_img(q.get('imagen'))
+            #
+            #     answers = q.pop('answers')
+            #
+            #     try:
+            #         question, q_created = Pregunta.objects.get_or_create(**q, tema=topic)
+            #         if q_created:
+            #             logger.info(f'Created question for {topic}')
+            #     except django.db.utils.IntegrityError:
+            #         pass
+            #
+            #     for y, a in enumerate(answers):
+            #         if 'imagen' in a.keys():
+            #             a['imagen'] = b64_to_img(a.get('imagen'))
+            #
+            #         # if 'texto' not in a.keys():
+            #         #     # TODO: don't send this to client
+            #         #     # TODO: fix this, this might create duplicates as i could change.
+            #         if 'texto' not in a.keys():
+            #             a['texto'] = f'autogenerado_{question.id}_{a["literal"]}'
+            #         try:
+            #             Respuesta.objects.get_or_create(**a, pregunta=question)
+            #         except django.db.utils.IntegrityError as e:
+            #             pass

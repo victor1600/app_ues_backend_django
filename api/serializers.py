@@ -14,10 +14,28 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class TopicSerializer(serializers.ModelSerializer):
+    nivel_usuario_actual = serializers.SerializerMethodField()
+    #dificultad_curso = serializers.SerializerMethodField()
+
+
     class Meta:
         model = Tema
-        exclude = ('created_at', 'activo')
-        # TODO: CONSIDER returning puntuacion por usuario
+        fields = ('id', 'texto',  'curso', 'nivel_usuario_actual')
+        #exclude = ('created_at', 'activo')
+
+    # def get_dificultad_curso(self, obj):
+    #     return obj.nivel_actual
+
+    def get_nivel_usuario_actual(self, obj):
+        request = self.context.get('request', None)
+        if request:
+            print("hola")
+            aspirante = Aspirante.objects.filter(user=request.user).first()
+            registro_puntuacion = PuntuacionTemaAspirante.objects.filter(tema=obj, aspirante=aspirante).first()
+            print(registro_puntuacion)
+            if registro_puntuacion:
+                return registro_puntuacion.nivel_actual
+        return Nivel.DIFFICULTY_BASIC
 
 
 class MaterialSerializer(serializers.ModelSerializer):
@@ -35,7 +53,6 @@ class QuestionSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         for field in ['texto', 'imagen']:
             try:
-                # print('autogenerado' in rep[field])
                 if rep[field] is None or 'autogenerado' in rep[field]:
                     rep.pop(field)
             except KeyError:

@@ -22,7 +22,7 @@ python manage.py migrate
 #
 ## populating db
 #echo "Checking for new data"
-
+#
 #python app_ues_backend_django/load_data.py
 
 echo "running server"

@@ -38,7 +38,7 @@ def on_exam_finished(sender, **kwargs):
                 tema = topics[0]
                 user_topic, _ = PuntuacionTemaAspirante.objects.get_or_create(tema=tema, aspirante=aspirante)
                 # every time a student gets more than 6 in a topic quiz he gets one point.
-                user_topic.puntuacion = F('puntuacion') + 1
+                user_topic.puntuacion = F('puntuacion') + 1.0
                 user_topic.save()
                 logger.info(f"User: {aspirante} earned 1 point.")
 
