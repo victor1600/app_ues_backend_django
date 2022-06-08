@@ -160,3 +160,12 @@ class HistoricoExamenCurso(models.Model):
     examen = models.ForeignKey(HistoricoExamen, on_delete=models.CASCADE, related_name='examen')
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='examen_curso')
     nota = models.FloatField(max_length=4)
+
+
+class Regla(models.Model):
+    name = models.CharField(max_length=255)
+    info = models.TextField()
+    imagen = models.ImageField(upload_to='photos/rules/%Y/%m/%d/', null=True, blank=True)
+
+    def __str__(self):
+        return self.info

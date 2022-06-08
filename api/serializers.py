@@ -133,3 +133,8 @@ class AspiranteSerializer(serializers.ModelSerializer):
 
     # TODO: Implement consecutive days practiced
 
+
+class RuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Regla
+        fields = '__all__'

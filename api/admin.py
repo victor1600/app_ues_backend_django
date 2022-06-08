@@ -1,8 +1,11 @@
 from django.contrib import admin
-from .models import Curso, Material, Tema, Respuesta, Pregunta, Nivel
+from .models import Curso, Material, Tema, Respuesta, Pregunta, Nivel, Regla
 from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
+
+
+admin.site.register(Regla)
 
 
 class TopicItemInline(admin.TabularInline):

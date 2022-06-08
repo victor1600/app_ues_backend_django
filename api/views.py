@@ -189,3 +189,8 @@ class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+
+
+class RulesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Regla.objects.all()
+    serializer_class = RuleSerializer
