@@ -55,14 +55,27 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
         if curso:
             for topic in Tema.objects.filter(curso=curso):
                 topics_by_level[topic.nivel_actual].append(TopicSerializer(topic, context={'request': request}).data)
-            # TODO: calculate current user level
-            for level, topics in topics_by_level.items():
-                if topics:
-                    levels[level] = all(map(lambda x: x['nivel_usuario_actual']==Nivel.DIFFICULTY_ADVANCED, topics))
+            for level in topics_by_level.keys():
+                if level == 'Intermedio':
+                    basic_completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
+                                              topics_by_level['Basico']))
+                    levels[level] = basic_completed
+                elif level == 'Avanzado':
+                    basic_completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
+                                              topics_by_level['Intermedio']))
+                    levels[level] = basic_completed
                 else:
-                    levels[level] = False
-
-            return Response({"topics_by_level": topics_by_level, "user_unlocked_levels": levels})
+                    # If level is basic
+                    levels[level] = True
+            result = []
+            for k in topics_by_level.keys():
+                new_level = {
+                    'name': k,
+                    'topics': topics_by_level[k],
+                    'available': levels[k]
+                }
+                result.append(new_level)
+            return Response(result)
         else:
             raise serializers.ValidationError("You have to send a valid course.")
 

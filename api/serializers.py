@@ -29,10 +29,8 @@ class TopicSerializer(serializers.ModelSerializer):
     def get_nivel_usuario_actual(self, obj):
         request = self.context.get('request', None)
         if request:
-            print("hola")
             aspirante = Aspirante.objects.filter(user=request.user).first()
             registro_puntuacion = PuntuacionTemaAspirante.objects.filter(tema=obj, aspirante=aspirante).first()
-            print(registro_puntuacion)
             if registro_puntuacion:
                 return registro_puntuacion.nivel_actual
         return Nivel.DIFFICULTY_BASIC

@@ -114,7 +114,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ['tema__curso', 'tema']
     list_per_page = 10
     list_select_related = ['tema']
-    search_fields = ['exto__istartswith']
+    search_fields = ['texto__istartswith']
     exclude = ['dificultad', 'numero_pregunta']
 
     def tema(self, question):
