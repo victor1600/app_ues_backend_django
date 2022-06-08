@@ -74,6 +74,9 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
                     'topics': topics_by_level[k],
                     'available': levels[k]
                 }
+                if k == 'Intermedio' and levels['Avanzado']:
+                    new_level['available'] = True
+
                 result.append(new_level)
             return Response(result)
         else:
