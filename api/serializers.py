@@ -15,16 +15,11 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class TopicSerializer(serializers.ModelSerializer):
     nivel_usuario_actual = serializers.SerializerMethodField()
-    #dificultad_curso = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Tema
         fields = ('id', 'texto',  'curso', 'nivel_usuario_actual')
-        #exclude = ('created_at', 'activo')
-
-    # def get_dificultad_curso(self, obj):
-    #     return obj.nivel_actual
 
     def get_nivel_usuario_actual(self, obj):
         request = self.context.get('request', None)

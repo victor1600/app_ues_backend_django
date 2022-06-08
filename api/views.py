@@ -44,8 +44,11 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['curso', 'nivel']
 
-    # TODO: implement is_available, performing a calculation on dependents previous score.
-    # TODO: Luego de lograr sacar mas de 6, tres veces en ambos temas, se desbloquea el siguiente.
+    @action(detail=True, methods=['GET'])
+    def current_user_level(self, request, pk):
+        topic = TopicSerializer(Tema.objects.filter(pk=pk).first(), context={'request': request}).data
+        return Response({"current_level": topic['nivel_usuario_actual']})
+
     @action(detail=False, methods=['GET'])
     def get_levels(self, request):
         levels = {l.dificultad: [] for l in Nivel.objects.all()}
