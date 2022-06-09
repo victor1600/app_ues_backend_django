@@ -163,9 +163,17 @@ class HistoricoExamenCurso(models.Model):
 
 
 class Regla(models.Model):
+    TYPE_TOPIC = 'Tema'
+    TYPE_COURSE = 'Curso'
+
+    DIFFICULTY_LEVELS = [
+        (TYPE_TOPIC, 'Tema'),
+        (TYPE_COURSE, 'Curso'),
+    ]
     name = models.CharField(max_length=255)
     info = models.TextField()
     imagen = models.ImageField(upload_to='photos/rules/%Y/%m/%d/', null=True, blank=True)
+    type = models.CharField(max_length=20, choices=DIFFICULTY_LEVELS, default='Curso')
 
     def __str__(self):
         return self.info
