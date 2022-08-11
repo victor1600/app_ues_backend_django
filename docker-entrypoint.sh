@@ -8,8 +8,10 @@ if [ -d "$DIR" ]; then
 else
   ###  Control will jump here if $DIR does NOT exists ###
   echo "Error: ${DIR} not found. Downloading..."
-  wget https://victor-g95-2.s3.amazonaws.com/media.zip
+  ### Downloading media file from google drive
+  wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1b_OHjSocfi-hsbASu2HHbpJWIdqPvASI' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1b_OHjSocfi-hsbASu2HHbpJWIdqPvASI" -O media.zip && rm -rf /tmp/cookies.txt
   unzip media.zip
+
 fi
 
 echo "performing migrations"
