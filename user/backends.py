@@ -22,6 +22,7 @@ class CustomAuthBackend(BaseBackend):
                 new_user.save()
                 Aspirante.objects.create(user=new_user)
                 logger.info(f'New user was created: {new_user}')
+                return new_user
 
         if user and user.check_password(password):
             # if user.is_superuser:
