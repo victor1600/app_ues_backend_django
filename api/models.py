@@ -48,7 +48,7 @@ class Tema(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
-    nivel = models.ForeignKey(Nivel, on_delete=models.PROTECT, blank=True, null=True, default=1)
+    nivel = models.ForeignKey(Nivel, on_delete=models.PROTECT, default=1)
 
     def __str__(self):
         return self.texto

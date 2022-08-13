@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now=True)),
                 ('activo', models.BooleanField(default=True)),
                 ('curso', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.curso')),
-                ('nivel', models.ForeignKey(blank=True, default=1, null=True, on_delete=django.db.models.deletion.PROTECT, to='api.nivel')),
+                ('nivel', models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to='api.nivel')),
             ],
             options={
                 'ordering': ['texto', 'created_at'],
