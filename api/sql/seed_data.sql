@@ -1096,3 +1096,6 @@ INSERT INTO api_material (id, texto, descripcion, created_at, archivo, activo, t
 INSERT INTO api_material (id, texto, descripcion, created_at, archivo, activo, tema_id) VALUES (131, 'Sociales tema 19.pdf', '', '2022-06-07 05:16:43.955672', 'files/2022/06/07/data/Sociales/Movimientos Sociales en el contexto de la vida Democracia en El Salvador/pdf/Sociales_tema_19.pdf', 1, 56);
 INSERT INTO api_material (id, texto, descripcion, created_at, archivo, activo, tema_id) VALUES (132, 'Raíces históricas del subdesarrollo.pdf', '', '2022-06-07 05:16:44.096686', 'files/2022/06/07/data/Sociales/Raices historicas del subdesarrollo/pdf/Raices_historicas_del_subdesarrollo.pdf', 1, 57);
 INSERT INTO api_material (id, texto, descripcion, created_at, archivo, activo, tema_id) VALUES (133, 'Sociales tema 5.pdf', '', '2022-06-07 05:16:44.352726', 'files/2022/06/07/data/Sociales/Raices historicas del subdesarrollo/pdf/Sociales_tema_5.pdf', 1, 57);
+
+INSERT INTO api_regla (id, name, info, imagen, type) VALUES (1, 'regla', 'Debes aprobar 3 veces para poder avanzar a plata y 5 veces para poder avanzar a oro.', '', 'Curso');
+INSERT INTO api_regla (id, name, info, imagen, type) VALUES (2, 'regla', 'Debes llegar a oro en cada uno de los niveles para poder pasar al siguiente nivel. ', null, 'Curso');
