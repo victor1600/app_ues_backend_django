@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "Checking if data folder exists"
 DIR="/app/media/"
@@ -15,10 +15,10 @@ else
 fi
 
 echo "performing migrations"
-python manage.py makemigrations
-python manage.py makemigrations user
-python manage.py makemigrations api
-python manage.py migrate
+python3 manage.py makemigrations
+python3 manage.py makemigrations user
+python3 manage.py makemigrations api
+python3 manage.py migrate
 
 
 #
@@ -33,10 +33,10 @@ echo $DJANGO_SETTINGS_MODULE
 
 if [ "$DJANGO_SETTINGS_MODULE" = "app_ues_backend_django.settings.prod" ]
 then
-  python manage.py collectstatic
+  python3 manage.py collectstatic
   echo "Running app using PROD gunicorn server"
   gunicorn --bind 0.0.0.0:8000 app_ues_backend_django.wsgi
 else
   echo "Running app using inbuilt DEV server"
-  python manage.py runserver 0.0.0.0:8000
+  python3 manage.py runserver 0.0.0.0:8000
 fi
