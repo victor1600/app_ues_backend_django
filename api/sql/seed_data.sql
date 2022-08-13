@@ -38,7 +38,7 @@ INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nive
 INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (10, 'Mecanica, cinematica y dinamica', '', '2022-06-04 05:28:49.966802', 1, 6, 1);
 INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (11, 'Relaciones de Proporcionalidad y Graficos', '', '2022-06-04 05:28:50.096704', 1, 6, 1);
 INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (12, 'Trabajo y energia cinetica', '', '2022-06-04 05:28:50.208278', 1, 6, 1);
-INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (13, 'Vectores', '', '2022-06-04 05:28:50.294318', 1, 6, 1);
+INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (13, 'Vectores', '', '2022-06-04 05:28:50.294318', 1, 6, 2);
 INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (14, 'Comunicacion Literaria', '', '2022-06-04 05:28:50.395436', 1, 2, 1);
 INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (15, 'Continuacion: Lengua Escrita', '', '2022-06-04 05:28:50.916839', 1, 2, 1);
 INSERT INTO api_tema (id, texto, descripcion, created_at, activo, curso_id, nivel_id) VALUES (16, 'El Sintagma y Reflexión sobre la Lengua', '', '2022-06-04 05:28:52.979198', 1, 2, 1);
@@ -1099,3 +1099,4 @@ INSERT INTO api_material (id, texto, descripcion, created_at, archivo, activo, t
 
 INSERT INTO api_regla (id, name, info, imagen, type) VALUES (1, 'regla', 'Debes aprobar 3 veces para poder avanzar a plata y 5 veces para poder avanzar a oro.', '', 'Curso');
 INSERT INTO api_regla (id, name, info, imagen, type) VALUES (2, 'regla', 'Debes llegar a oro en cada uno de los niveles para poder pasar al siguiente nivel. ', null, 'Curso');
+INSERT INTO api_regla (id, name, info, imagen, type) VALUES (3, 'regla', 'Para avanzar a nivel plata, debe aprobar 3 veces un examen con mas de 7. Para pasar a nivel oro, debe aprobarse mas de 5 veces.', null, 'Tema');

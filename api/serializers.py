@@ -16,10 +16,9 @@ class CourseSerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     nivel_usuario_actual = serializers.SerializerMethodField()
 
-
     class Meta:
         model = Tema
-        fields = ('id', 'texto',  'curso', 'nivel_usuario_actual')
+        fields = ('id', 'texto', 'curso', 'nivel_usuario_actual')
 
     def get_nivel_usuario_actual(self, obj):
         request = self.context.get('request', None)
@@ -119,7 +118,7 @@ class AspiranteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aspirante
-        fields = ['id','imagen','first_name', 'last_name', 'score', 'average_grades',
+        fields = ['id', 'imagen', 'first_name', 'last_name', 'score', 'average_grades',
                   'n_exams_completed', 'user_id', 'rank']
 
     def get_average_grades(self, obj):
