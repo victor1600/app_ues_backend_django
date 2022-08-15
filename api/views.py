@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
@@ -44,6 +44,7 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['curso', 'nivel']
 
+
     @action(detail=True, methods=['GET'])
     def current_user_level(self, request, pk):
         topic = TopicSerializer(Tema.objects.filter(pk=pk).first(), context={'request': request}).data
@@ -60,13 +61,21 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
                 topics_by_level[topic.nivel_actual].append(TopicSerializer(topic, context={'request': request}).data)
             for level in topics_by_level.keys():
                 if level == 'Intermedio':
-                    basic_completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
-                                              topics_by_level['Basico']))
-                    levels[level] = basic_completed
+                    if topics_by_level['Basico']:
+                        completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
+                                                  topics_by_level['Basico']))
+                        levels[level] = completed
+                    else:
+                        levels[level] = False
                 elif level == 'Avanzado':
-                    basic_completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
-                                              topics_by_level['Intermedio']))
-                    levels[level] = basic_completed
+                    if topics_by_level['Intermedio']:
+                        completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
+                                                  topics_by_level['Intermedio']))
+
+
+                        levels[level] = completed
+                    else:
+                        levels[level] = False
                 else:
                     # If level is basic
                     levels[level] = True
