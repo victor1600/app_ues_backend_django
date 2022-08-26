@@ -72,7 +72,7 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pregunta
-        fields = ('id', 'texto', 'imagen', 'tema', 'answers', 'nivel')
+        fields = ('id', 'texto', 'imagen', 'tema', 'answers', 'nivel', 'tipo')
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
