@@ -18,6 +18,7 @@ import logging
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from .selectors.level_selectors import get_mastered_levels
 from .serializers import *
 from .models import *
 from rest_framework import viewsets, status
@@ -111,16 +112,27 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tema']
 
-    # TODO: When exam is general, configure sending  Q&A that the user has unlocked so far?
-    # Consider using Bronze, silver and gold.
+    # TODO: si el tema esta en filterset, retornar  Bronze, silver and gold.
     def get_queryset(self):
+        if 'tema' in self.request.query_params.keys():
+            topic_id = self.request.query_params.get('tema')
+            tema = Tema.objects.filter(pk=int(topic_id)).first()
+            if tema:
+                user = self.request.user
+                if user:
+                    user_level_for_topic = get_current_level_for_user(tema, user)
+                    logger.info(f'User level for {tema} is {user_level_for_topic}')
+                    mastered_levels = get_mastered_levels(user_level_for_topic)
+                    self.queryset = self.queryset.filter(nivel__in=mastered_levels)
+
         if 'limit' in self.request.query_params.keys():
             try:
                 limit = int(self.request.query_params.get('limit'))
                 if limit > 0:
                     return self.queryset.all().order_by('?')[:limit]
+                # TODO: when sending limit and tema, an exception 500 is raised. FIX.
             except:
-                # TODO: implement better logic for this validation
+
                 logger.warning('Invalid limit query param')
         return self.queryset.all().order_by('?')
 
@@ -191,7 +203,6 @@ User = get_user_model()
 
 
 class CandidateApiViewSet(viewsets.ReadOnlyModelViewSet):
-    # TODO: annotate with position
     queryset = Aspirante.objects.select_related('user').annotate(score=Coalesce(Sum('examen__nota'), 0.0)) \
         .annotate(n_exams_completed=Coalesce(Count('examen'), 0)) \
         .order_by('-score').annotate(rank=Window(

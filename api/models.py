@@ -82,9 +82,19 @@ class Pregunta(models.Model):
     TYPE_MULTIPLE_CHOICE = 'Opción múltiple'
     TYPE_COMPLEMENT = 'Complementar'
 
-    LEVEL_TYPES = [
+    TYPES_OF_QUESTION = [
         (TYPE_MULTIPLE_CHOICE, 'Opción múltiple'),
         (TYPE_COMPLEMENT, 'Complementar'),
+    ]
+
+    DIFFICULTY_BASIC = 'Basico'
+    DIFFICULTY_INTERMEDIATE = 'Intermedio'
+    DIFFICULTY_ADVANCED = 'Avanzado'
+
+    DIFFICULTY_LEVELS = [
+        (DIFFICULTY_BASIC, 'Basico'),
+        (DIFFICULTY_INTERMEDIATE, 'Intermedio'),
+        (DIFFICULTY_ADVANCED, 'Avanzado'),
     ]
 
     texto = models.TextField(null=True)
@@ -93,7 +103,8 @@ class Pregunta(models.Model):
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
     numero_pregunta = models.IntegerField(null=True, blank=True)
-    tipo = models.CharField(max_length=255, choices=LEVEL_TYPES, default=TYPE_MULTIPLE_CHOICE)
+    tipo = models.CharField(max_length=255, choices=TYPES_OF_QUESTION, default=TYPE_MULTIPLE_CHOICE)
+    nivel = models.CharField(max_length=255, choices= DIFFICULTY_LEVELS, default=DIFFICULTY_BASIC)
 
     def __str__(self):
         if self.texto:
@@ -125,7 +136,7 @@ class Respuesta(models.Model):
         managed = settings.MANAGED
         unique_together = ('pregunta', 'literal')
 
-    def save(self,  *args, **kwargs):
+    def save(self, *args, **kwargs):
         if self.pregunta.tipo == Pregunta.TYPE_COMPLEMENT:
             self.es_respuesta_correcta = True
         super().save(*args, kwargs)
@@ -159,7 +170,7 @@ class PuntuacionTemaAspirante(models.Model):
 
     @property
     def nivel_actual(self):
-        return Nivel.objects.order_by('-puntos_necesarios')\
+        return Nivel.objects.order_by('-puntos_necesarios') \
             .filter(puntos_necesarios__lte=self.puntuacion).first().dificultad
 
 

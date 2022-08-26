@@ -2,6 +2,7 @@ from django.db.models import Q, Avg, Sum
 
 from rest_framework import serializers
 from .models import *
+from .selectors.grading_selectors import get_current_level_for_user
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -23,11 +24,7 @@ class TopicSerializer(serializers.ModelSerializer):
     def get_nivel_usuario_actual(self, obj):
         request = self.context.get('request', None)
         if request:
-            aspirante = Aspirante.objects.filter(user=request.user).first()
-            registro_puntuacion = PuntuacionTemaAspirante.objects.filter(tema=obj, aspirante=aspirante).first()
-            if registro_puntuacion:
-                return registro_puntuacion.nivel_actual
-        return Nivel.DIFFICULTY_BASIC
+            return get_current_level_for_user(obj, request.user)
 
 
 class MaterialSerializer(serializers.ModelSerializer):
