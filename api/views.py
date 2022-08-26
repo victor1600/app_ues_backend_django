@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -44,7 +45,6 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['curso', 'nivel']
 
-
     @action(detail=True, methods=['GET'])
     def current_user_level(self, request, pk):
         topic = TopicSerializer(Tema.objects.filter(pk=pk).first(), context={'request': request}).data
@@ -63,15 +63,14 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
                 if level == 'Intermedio':
                     if topics_by_level['Basico']:
                         completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
-                                                  topics_by_level['Basico']))
+                                            topics_by_level['Basico']))
                         levels[level] = completed
                     else:
                         levels[level] = False
                 elif level == 'Avanzado':
                     if topics_by_level['Intermedio']:
                         completed = all(map(lambda x: x['nivel_usuario_actual'] == Nivel.DIFFICULTY_ADVANCED,
-                                                  topics_by_level['Intermedio']))
-
+                                            topics_by_level['Intermedio']))
 
                         levels[level] = completed
                     else:
@@ -128,27 +127,54 @@ class ExamQuestionsAndAnswersViewSet(viewsets.ReadOnlyModelViewSet):
 
 class GradeView(APIView):
     def post(self, request, format=None):
-        # TODO: Si es un examen por tema, hacer calculo y almacenar puntaje en el historico.
-        serializer = ExamResultSerializer(data=request.data)
+        if "questions" not in request.data.keys():
+            raise ValidationError("Please send questions ids in the body.")
+        questions = request.data["questions"]
+        question_ids_serializers = QuestionIdsSerializer(data={"questions": questions})
+        question_ids_serializers.is_valid(raise_exception=True)
+        question_ids = question_ids_serializers.data.get("questions")
+        if "answers" not in request.data.keys():
+            raise ValidationError("Please send answers ids in the body.")
+
+        if len(request.data["questions"]) != len(request.data["answers"]):
+            raise ValidationError("Please send same length of answers and questions.")
+        only_multiple_choice_answers = [a for a in request.data["answers"] if isinstance(a, int)]
+        string_answers = [a for a in request.data["answers"] if isinstance(a, str)]
+        string_ids = []
+        for string_answer in string_answers:
+            string_id = [i[0] for i in Respuesta.objects.filter(texto__iexact=string_answer).values_list('id')]
+            if not string_id:
+                string_ids.append(None)
+            else:
+                string_ids.extend(string_id)
+
+        print(string_ids)
+
+        serializer = MultipleChoiceAnswersSerializer(data={"answers": only_multiple_choice_answers})
         if serializer.is_valid():
-            answer_ids = serializer.data.get("answers")
+            answer_ids = serializer.data.get("answers") + string_ids
+            question_answer_ids = [[q, a] for q, a in zip(question_ids, answer_ids)]
+
+            if len(answer_ids) == 0:
+                # Raising a validation error.
+                raise ValidationError("Please send at least one answer. Either an id, or a text.")
 
             grade = Respuesta.objects.filter(Q(pk__in=answer_ids) & Q(es_respuesta_correcta=True)) \
-                        .count() / len(answer_ids) * 10
+                        .count() / len(request.data["answers"]) * 10
             notas_parciales = {}
-            # TODO: SI TODAS LAS PREGUNTAS CORRESPONDEN A UN SOLO TEMA, ENTONCES CALCULAR PUNTAJE Y ACTUALIZAR
-            # (TODO) EN TABLA CORRESPONDIENTE
             topics = []
-
-            for a_id in answer_ids:
-                answer = Respuesta.objects.get(pk=a_id)
-                question = answer.pregunta
+            for q_id, a_id in zip(question_ids, answer_ids):
+                answer = Respuesta.objects.filter(pk=a_id).first()
+                question = Pregunta.objects.get(pk=q_id)
                 topics.append(question.tema)
 
                 if question.tema.curso.texto not in notas_parciales:
                     notas_parciales[question.tema.curso.texto] = []
 
-                notas_parciales[question.tema.curso.texto].append(answer.es_respuesta_correcta)
+                if answer:
+                    notas_parciales[question.tema.curso.texto].append(answer.es_respuesta_correcta)
+                else:
+                    notas_parciales[question.tema.curso.texto].append(False)
 
             for k, v in notas_parciales.items():
                 notas_parciales[k] = sum(v) / len(v) * 10

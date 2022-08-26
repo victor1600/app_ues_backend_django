@@ -1,4 +1,4 @@
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Sum
 
 from rest_framework import serializers
 from .models import *
@@ -88,8 +88,16 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
         return rep
 
 
-class ExamResultSerializer(serializers.Serializer):
+class MultipleChoiceAnswersSerializer(serializers.Serializer):
     answers = serializers.PrimaryKeyRelatedField(queryset=Respuesta.objects.all(), many=True)
+
+
+class QuestionIdsSerializer(serializers.Serializer):
+    questions = serializers.PrimaryKeyRelatedField(queryset=Pregunta.objects.all(), many=True)
+
+
+# class RawAnswersSerializer(serializers.Serializer):
+#     answers = serializers.ListSerializer()
 
 
 class PartialGradeSerializer(serializers.Serializer):
@@ -123,11 +131,11 @@ class AspiranteSerializer(serializers.ModelSerializer):
 
     def get_average_grades(self, obj):
         result = Curso.objects \
-            .annotate(nota_parcial=Avg('examen_curso__nota')).filter(~Q(nota_parcial=None)) \
+            .annotate(nota_parcial=Sum('examen_curso__nota')).filter(~Q(nota_parcial=None)) \
             .filter(examen_curso__examen__aspirante__id=obj.id)
 
         serializer = CourseSerializer(result, many=True)
-        grades = [{'course': c['texto'], 'grade': round(c['nota_parcial'], 2)} for c in serializer.data]
+        grades = [{'course': c['texto'], 'grade': c['nota_parcial']} for c in serializer.data]
         return grades
 
     # TODO: Implement consecutive days practiced

@@ -253,6 +253,8 @@ INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta
 INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta,  tema_id) VALUES (258, '¿Qué son las remesas familiares?', '2022-06-04 05:29:44.258430', '', 1, 4, 54);
 INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta,  tema_id) VALUES (259, '¿A qué se debe la reducción de la pobreza durante la década de los noventa en El Salvador?', '2022-06-04 05:29:44.406449', '', 1, 5, 54);
 INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta,  tema_id) VALUES (260, '¿Quiénes se benefician de la globalización?', '2022-06-04 05:29:44.565652', '', 1, 6, 54);
+INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta, tema_id, tipo) VALUES (263, 'Proceso de degradar o descomponer nutrientes orgánicos complejos en sustancias simples con el objetivo obtener energía útil para las células', '2022-08-26 02:13:05.521271', '', 1, null, 3, 'Complementar');
+INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta, tema_id, tipo) VALUES (265, 'es un proceso metabólico en el cual se generan sustancias complejas a partir de otras sustancias más simples', '2022-08-26 02:14:00.045702', '', 1, null, 3, 'Complementar');
 
 
 -- respuesta
@@ -961,6 +963,9 @@ INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo,
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1028, 'Los gobiernos', '2022-06-04 05:29:44.626771', 0, 1, 'B', '', 260);
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1029, 'La sociedad en general', '2022-06-04 05:29:44.658163', 0, 1, 'C', '', 260);
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1030, 'Los países desarrollados y las grandes empresas transnacionales', '2022-06-04 05:29:44.688803', 1, 1, 'D', '', 260);
+
+INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1033, 'catabolismo', '2022-08-26 02:13:05.542423', 1, 1, null, '', 263);
+INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1035, 'anabolismo', '2022-08-26 02:14:00.062428', 1, 1, null, '', 265);
 
 -- material
 INSERT INTO api_material (id, texto, descripcion, created_at, archivo, activo, tema_id) VALUES (1, 'Metabolismo celular parte I.pdf', '', '2022-06-07 05:16:23.768614', 'files/2022/06/07/data/Biologia/Metabolismo Celular/pdf/Metabolismo_celular_parte_I.pdf', 1, 1);

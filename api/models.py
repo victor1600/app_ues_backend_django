@@ -79,12 +79,21 @@ class Material(models.Model):
 
 
 class Pregunta(models.Model):
+    TYPE_MULTIPLE_CHOICE = 'Opción múltiple'
+    TYPE_COMPLEMENT = 'Complementar'
+
+    LEVEL_TYPES = [
+        (TYPE_MULTIPLE_CHOICE, 'Opción múltiple'),
+        (TYPE_COMPLEMENT, 'Complementar'),
+    ]
+
     texto = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True)
     imagen = models.ImageField(upload_to='photos/question_images/%Y/%m/%d/', null=True, blank=True)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     activo = models.BooleanField(default=True)
     numero_pregunta = models.IntegerField(null=True, blank=True)
+    tipo = models.CharField(max_length=255, choices=LEVEL_TYPES, default=TYPE_MULTIPLE_CHOICE)
 
     def __str__(self):
         if self.texto:
@@ -103,7 +112,6 @@ class Respuesta(models.Model):
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE, related_name='answers')
     es_respuesta_correcta = models.BooleanField()
     activo = models.BooleanField(default=True)
-    # TODO: consider adding 'literal field'
     literal = models.CharField(max_length=2, null=True, blank=True)
     imagen = models.ImageField(upload_to='photos/answer_images/%Y/%m/%d/', null=True, blank=True)
 
@@ -116,6 +124,11 @@ class Respuesta(models.Model):
     class Meta:
         managed = settings.MANAGED
         unique_together = ('pregunta', 'literal')
+
+    def save(self,  *args, **kwargs):
+        if self.pregunta.tipo == Pregunta.TYPE_COMPLEMENT:
+            self.es_respuesta_correcta = True
+        super().save(*args, kwargs)
 
 
 class Aspirante(models.Model):
