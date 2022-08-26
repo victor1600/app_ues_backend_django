@@ -252,6 +252,9 @@ INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta
 INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta,  tema_id, tipo) VALUES (258, '¿Qué son las remesas familiares?', '2022-06-04 05:29:44.258430', '', 1, 4, 54, 'Opción múltiple');
 INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta,  tema_id, tipo) VALUES (259, '¿A qué se debe la reducción de la pobreza durante la década de los noventa en El Salvador?', '2022-06-04 05:29:44.406449', '', 1, 5, 54, 'Opción múltiple');
 INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta,  tema_id, tipo) VALUES (260, '¿Quiénes se benefician de la globalización?', '2022-06-04 05:29:44.565652', '', 1, 6, 54, 'Opción múltiple');
+INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta, tipo, tema_id) VALUES (261, 'Es un proceso metabólico en el cual se generan sustancias complejas a partir de otras sustancias más simples', '2022-08-26 02:42:31.090504', '', 1, null, 'Complementar', 3);
+INSERT INTO api_pregunta (id, texto, created_at, imagen, activo, numero_pregunta, tipo, tema_id) VALUES (262, 'proceso de degradación de nutrientes complejos en sustancias simples', '2022-08-26 02:42:52.766865', '', 1, null, 'Opción múltiple', 3);
+
 
 
 -- respuesta
@@ -960,6 +963,9 @@ INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo,
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1028, 'Los gobiernos', '2022-06-04 05:29:44.626771', 0, 1, 'B', '', 260);
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1029, 'La sociedad en general', '2022-06-04 05:29:44.658163', 0, 1, 'C', '', 260);
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1030, 'Los países desarrollados y las grandes empresas transnacionales', '2022-06-04 05:29:44.688803', 1, 1, 'D', '', 260);
+INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1031, 'anabolismo', '2022-08-26 02:42:31.109979', 1, 1, null, '', 261);
+INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1032, 'catabolismo', '2022-08-26 02:42:52.784401', 0, 1, null, '', 262);
+
 
 
 -- material
