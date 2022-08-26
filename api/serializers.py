@@ -72,7 +72,7 @@ class ExamQuestionsAndAnswersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pregunta
-        fields = ('id', 'texto', 'imagen', 'tema', 'answers')
+        fields = ('id', 'texto', 'imagen', 'tema', 'answers', 'nivel')
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -91,10 +91,6 @@ class MultipleChoiceAnswersSerializer(serializers.Serializer):
 
 class QuestionIdsSerializer(serializers.Serializer):
     questions = serializers.PrimaryKeyRelatedField(queryset=Pregunta.objects.all(), many=True)
-
-
-# class RawAnswersSerializer(serializers.Serializer):
-#     answers = serializers.ListSerializer()
 
 
 class PartialGradeSerializer(serializers.Serializer):
