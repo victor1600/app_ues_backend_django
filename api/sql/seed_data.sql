@@ -964,7 +964,7 @@ INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo,
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1029, 'La sociedad en general', '2022-06-04 05:29:44.658163', 0, 1, 'C', '', 260);
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1030, 'Los países desarrollados y las grandes empresas transnacionales', '2022-06-04 05:29:44.688803', 1, 1, 'D', '', 260);
 INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1031, 'anabolismo', '2022-08-26 02:42:31.109979', 1, 1, null, '', 261);
-INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1032, 'catabolismo', '2022-08-26 02:42:52.784401', 0, 1, null, '', 262);
+INSERT INTO api_respuesta (id, texto, created_at, es_respuesta_correcta, activo, literal, imagen, pregunta_id) VALUES (1032, 'catabolismo', '2022-08-26 02:42:52.784401', 1, 1, null, '', 262);
 
 
 
